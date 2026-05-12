@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "Nhà tài trợ";
+}
+
+<br />
+<br />
+
+<table height=100% width=100%>
+    <tr>
+        <td align=center valign=center>
+            <div class="panel panel-success table-container">
+                <div class="panel-heading" style="font-size: 25px; text-align: center">Danh sách các nhà tài trợ</div>
+                <div class="panel-body">
+                    <span class="label label-success">Thắng: @ViewBag.Win (@ViewBag.WinPercent%)</span>
+                    <span class="label label-warning">Hòa: @ViewBag.Draw (@ViewBag.DrawPercent%)</span>
+                    <span class="label label-danger">Thua: @ViewBag.Loose (@ViewBag.LoosePercent%)</span>
+                    <span class="label label-info">Tổng tiền: @ViewBag.CalcMoney.ToString("n0")</span>
+                </div>
+                <table class="table table-bordered table-hover table-striped">
+                    <tr>
+                        <th>#</th>
+                        <th style="text-align: center">Tên</th>
+                        @if (ViewBag.AllowBetMoney == true)
+            {
+                    <th style="text-align: center">Số tiền(VND)</th>
+            }
+                     @*                        <th style="text-align: center">Đã thu(VND)</th>*@
+                        <th style="text-align: center">Xếp hạng</th>
+                    </tr>
+                    @foreach (var item in Model)
+            {
+                var style = "";
+                switch ((int)item.RankUser)
+                {
+                    case 1:
+                        style += "color: gold";
+                        break;
+                    case 2:
+                        style += "color: silver";
+                        break;
+                    case 3:
+                        style += "color: #D98719";
+                        break;
+                }
+                string success = HttpContext.Current.User.Identity.Name == item.UserName ? "label label-primary" : "";
+                <tr>
+                    <td>@item.No</td>
+                    <td>
+                        <span class="glyphicon glyphicon-usd" style="@style"></span>
+                        <a href="@Url.Action("User", "Prediction", new {userName = @item.UserName})"><span class="@success">@item.UserName (@item.Deparment.ToUpper())</span></a>
+                    </td>
+
+                    @if (ViewBag.AllowBetMoney == true)
+                    {
+                <td style="text-align: center">
+                    @item.TotalMoney.ToString("n0")
+                    @{ var diff = item.TotalMoney - @item.LastTotalMoney;}
+                    @if (diff > 0)
+                    {
+                <span title="Tiền thay đổi: +@diff.ToString("n0") (so với trước 1 trận)" class="glyphicon glyphicon-arrow-up" style="color:green"></span> }
+                    else if (diff == 0)
+                    {
+                <span title="Tiền thay đổi: @diff.ToString("n0") (so với trước 1 trận)" class="glyphicon glyphicon-arrow-right" style="color:gold"></span> }
+                    else
+                    {
+                <span title="Tiền thay đổi: @diff.ToString("n0") (so với trước 1 trận)" class="glyphicon glyphicon-arrow-down" style="color:red"></span>}
+                </td>
+                        }
+                                    <td style="text-align: center">
+                                        @item.RankUser
+                                        @{ var diff_1 = @item.LastRank - item.RankUser;}
+                                        @if (diff_1 > 0)
+                                        {
+                    <span title="Thứ hạng thay đổi: +@diff_1 (so với trước 1 trận)" class="glyphicon glyphicon-arrow-up" style="color:green"></span> }
+                                        else if (diff_1 == 0)
+                                        {
+                    <span title="Thứ hạng thay đổi: @diff_1 (so với trước 1 trận)" class="glyphicon glyphicon-arrow-right" style="color:gold"></span> }
+                                        else
+                                        {
+                    <span title="Thứ hạng thay đổi: @diff_1 (so với trước 1 trận)" class="glyphicon glyphicon-arrow-down" style="color:red"></span>}
+                                    </td>
+                                                    </tr>
+    }
+                </table>
+
+            </div>
+            <div class="fb-comments" data-href="http://euro2024.lenmay.vn/Ranking/Sponsor" data-width="560px" data-order-by="reverse_time" data-numposts="20"></div>
+        </td>
+    </tr>
+</table>

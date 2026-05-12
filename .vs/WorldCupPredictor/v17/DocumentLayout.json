@@ -1,0 +1,137 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\PROJECT\\EURO\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E421DB7E-F8BF-413C-849A-9D06984AA8C3}|WorldCupPredictor\\WorldCupPredictor.csproj|d:\\project\\euro\\worldcuppredictor\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{E421DB7E-F8BF-413C-849A-9D06984AA8C3}|WorldCupPredictor\\WorldCupPredictor.csproj|solutionrelative:worldcuppredictor\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E421DB7E-F8BF-413C-849A-9D06984AA8C3}|WorldCupPredictor\\WorldCupPredictor.csproj|D:\\PROJECT\\EURO\\worldcuppredictor\\controllers\\predictioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E421DB7E-F8BF-413C-849A-9D06984AA8C3}|WorldCupPredictor\\WorldCupPredictor.csproj|solutionrelative:worldcuppredictor\\controllers\\predictioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E421DB7E-F8BF-413C-849A-9D06984AA8C3}|WorldCupPredictor\\WorldCupPredictor.csproj|D:\\PROJECT\\EURO\\worldcuppredictor\\views\\ranking\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E421DB7E-F8BF-413C-849A-9D06984AA8C3}|WorldCupPredictor\\WorldCupPredictor.csproj|solutionrelative:worldcuppredictor\\views\\ranking\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E421DB7E-F8BF-413C-849A-9D06984AA8C3}|WorldCupPredictor\\WorldCupPredictor.csproj|D:\\PROJECT\\EURO\\worldcuppredictor\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E421DB7E-F8BF-413C-849A-9D06984AA8C3}|WorldCupPredictor\\WorldCupPredictor.csproj|solutionrelative:worldcuppredictor\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E421DB7E-F8BF-413C-849A-9D06984AA8C3}|WorldCupPredictor\\WorldCupPredictor.csproj|D:\\PROJECT\\EURO\\worldcuppredictor\\views\\prediction\\detail.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E421DB7E-F8BF-413C-849A-9D06984AA8C3}|WorldCupPredictor\\WorldCupPredictor.csproj|solutionrelative:worldcuppredictor\\views\\prediction\\detail.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E421DB7E-F8BF-413C-849A-9D06984AA8C3}|WorldCupPredictor\\WorldCupPredictor.csproj|D:\\PROJECT\\EURO\\worldcuppredictor\\views\\prediction\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E421DB7E-F8BF-413C-849A-9D06984AA8C3}|WorldCupPredictor\\WorldCupPredictor.csproj|solutionrelative:worldcuppredictor\\views\\prediction\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E421DB7E-F8BF-413C-849A-9D06984AA8C3}|WorldCupPredictor\\WorldCupPredictor.csproj|D:\\PROJECT\\EURO\\worldcuppredictor\\controllers\\rankingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E421DB7E-F8BF-413C-849A-9D06984AA8C3}|WorldCupPredictor\\WorldCupPredictor.csproj|solutionrelative:worldcuppredictor\\controllers\\rankingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Web.config",
+              "DocumentMoniker": "D:\\PROJECT\\EURO\\WorldCupPredictor\\Web.config",
+              "RelativeDocumentMoniker": "WorldCupPredictor\\Web.config",
+              "ToolTip": "D:\\PROJECT\\EURO\\WorldCupPredictor\\Web.config",
+              "RelativeToolTip": "WorldCupPredictor\\Web.config",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABgAAAArAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2024-07-11T01:16:31.469Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PredictionController.cs",
+              "DocumentMoniker": "D:\\PROJECT\\EURO\\WorldCupPredictor\\Controllers\\PredictionController.cs",
+              "RelativeDocumentMoniker": "WorldCupPredictor\\Controllers\\PredictionController.cs",
+              "ToolTip": "D:\\PROJECT\\EURO\\WorldCupPredictor\\Controllers\\PredictionController.cs",
+              "RelativeToolTip": "WorldCupPredictor\\Controllers\\PredictionController.cs",
+              "ViewState": "AQIAAG4AAAAAAAAAAAAAAHoAAAAnAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-04T01:37:51.098Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\PROJECT\\EURO\\WorldCupPredictor\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "WorldCupPredictor\\Views\\Home\\Index.cshtml",
+              "ToolTip": "D:\\PROJECT\\EURO\\WorldCupPredictor\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "WorldCupPredictor\\Views\\Home\\Index.cshtml",
+              "ViewState": "AQIAABgAAAAAAAAAAAAAACoAAADfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-17T05:01:06.873Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\PROJECT\\EURO\\WorldCupPredictor\\Views\\Ranking\\Index.cshtml",
+              "RelativeDocumentMoniker": "WorldCupPredictor\\Views\\Ranking\\Index.cshtml",
+              "ToolTip": "D:\\PROJECT\\EURO\\WorldCupPredictor\\Views\\Ranking\\Index.cshtml",
+              "RelativeToolTip": "WorldCupPredictor\\Views\\Ranking\\Index.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAXAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-17T01:17:10.848Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Detail.cshtml",
+              "DocumentMoniker": "D:\\PROJECT\\EURO\\WorldCupPredictor\\Views\\Prediction\\Detail.cshtml",
+              "RelativeDocumentMoniker": "WorldCupPredictor\\Views\\Prediction\\Detail.cshtml",
+              "ToolTip": "D:\\PROJECT\\EURO\\WorldCupPredictor\\Views\\Prediction\\Detail.cshtml",
+              "RelativeToolTip": "WorldCupPredictor\\Views\\Prediction\\Detail.cshtml",
+              "ViewState": "AQIAAH4BAAAAAAAAAADgv4YBAABJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-17T01:04:25.895Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\PROJECT\\EURO\\WorldCupPredictor\\Views\\Prediction\\Index.cshtml",
+              "RelativeDocumentMoniker": "WorldCupPredictor\\Views\\Prediction\\Index.cshtml",
+              "ToolTip": "D:\\PROJECT\\EURO\\WorldCupPredictor\\Views\\Prediction\\Index.cshtml",
+              "RelativeToolTip": "WorldCupPredictor\\Views\\Prediction\\Index.cshtml",
+              "ViewState": "AQIAACABAAAAAAAAAAAgwC4BAABJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-17T01:01:39.691Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "RankingController.cs",
+              "DocumentMoniker": "D:\\PROJECT\\EURO\\WorldCupPredictor\\Controllers\\RankingController.cs",
+              "RelativeDocumentMoniker": "WorldCupPredictor\\Controllers\\RankingController.cs",
+              "ToolTip": "D:\\PROJECT\\EURO\\WorldCupPredictor\\Controllers\\RankingController.cs",
+              "RelativeToolTip": "WorldCupPredictor\\Controllers\\RankingController.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAAB4AAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-17T00:56:01.945Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

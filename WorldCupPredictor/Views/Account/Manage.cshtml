@@ -1,0 +1,35 @@
+﻿@using WorldCupPredictor.Models;
+@using Microsoft.AspNet.Identity;
+@{ ViewBag.Title = "Đổi mật khẩu"; }
+
+<img style="margin:0 auto;width:100%;" src="~/Content/images/banner_home.jpg" />
+
+<h2>@ViewBag.Title.</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+
+@if (HttpContext.Current.User.Identity.Name == "05491" || HttpContext.Current.User.Identity.Name == "00067")
+{
+<div>
+    @Html.ActionLink("Manage next matchs", "ManageMatch", "GroupTable", new { }, new { }) | 
+    @Html.ActionLink("Manage Reset Password", "ManageResetPassword", "Account", new { }, new { })
+</div>
+}
+                <div class="row">
+                    <div class="col-md-12">
+                        @if (ViewBag.HasLocalPassword)
+                        {
+        @Html.Partial("_ChangePasswordPartial") }
+    else
+    {
+@Html.Partial("_SetPasswordPartial")}
+
+                        @*        <section id="externalLogins">*@
+                        @*            @Html.Action("RemoveAccountList")*@
+                        @*            @Html.Partial("_ExternalLoginsListPartial", new { Action = "LinkLogin", ReturnUrl = ViewBag.ReturnUrl })*@
+                        @*        </section>*@
+                    </div>
+                </div>
+                                @section Scripts {
+                                    @Scripts.Render("~/bundles/jqueryval")
+                                }

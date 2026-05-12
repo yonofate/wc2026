@@ -1,0 +1,76 @@
+﻿@model WorldCupPredictor.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Đăng ký tài khoản";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Tạo tài khoản dự đoán Euro 2024.</h4>
+    <hr />
+    @Html.ValidationSummary()
+    <div class="form-group">
+        @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.UserName, new { placeholder = "xxxxx", @class = "form-control" })
+            <span class="text-warning">Tên đăng nhập là mã NV</span>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.FullName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Company, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Company, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Deparment, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Deparment, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Phone, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Phone, new { placeholder = "09xxx", @class = "form-control" })
+            <span class="text-warning">Vui lòng nhập chính xác SDT để chúng tôi liên hệ</span>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @*            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })*@
+            @Html.Password("Password", "", new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @*            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })*@
+            @Html.Password("ConfirmPassword", "", new { @class = "form-control" })
+        </div>
+    </div>
+    <span>Click vào nút đăng ký đồng nghĩa bạn đồng ý với <a href="/">thể lệ</a> của chúng tôi</span>
+    <div class="form-group" style="margin-top:20px;">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Đăng ký tài khoản" />
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

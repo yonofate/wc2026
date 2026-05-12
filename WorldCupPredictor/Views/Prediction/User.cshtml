@@ -1,0 +1,137 @@
+﻿@{ ViewBag.Title = "Kết quả của dự đoán của " + Model.UserName; }
+
+<br />
+<br />
+<style>
+    .table-center tr th, .table-center tr td {
+        text-align: center;
+        vertical-align:middle !important;
+    }
+</style>
+
+<table height=100% width=100%>
+    <tr>
+        <td align=center valign=center>
+            <div class="panel panel-success table-container">
+                <div class="panel-heading" style="font-size: 25px">Kết quả dự đoán của <span class="label label-primary">@Model.UserAccount.FullName</span></div>
+                <div class="panel-heading" style="font-size: 16px;background-color:#fff">
+                    @{ for (int i = 0; i < Model.StarSummay.Used; i++)
+                        {
+                        <span title="đã dùng" class="glyphicon glyphicon-star" style="color: gold"></span> }
+                            for (int j = 0; j < Model.StarSummay.NotUsed; j++)
+                            {
+                        <span title="chưa dùng" class="glyphicon glyphicon-star" style="color: #808080"></span> }
+
+
+}
+                    @if (@Model.StarSummay.NotUsed > 0)
+                    {
+                    <p><strong>Còn lại @Model.StarSummay.NotUsed lần</strong> dùng ngôi sao hy vọng</p>
+            }
+            else
+            {
+                <p>Đã dùng hết @Model.StarSummay.Total ngôi sao hy vọng</p>
+            }
+                </div>
+                <div class="panel-body">
+                    <span class="label label-success">Thắng: @Model.Win (@Model.WinPercent%)</span>
+                    <span class="label label-warning">Hòa: @Model.Draw (@Model.DrawPercent%)</span>
+                    <span class="label label-danger">Thua: @Model.Loose (@Model.LoosePercent%)</span>
+                    @*<span class="label label-info">Tổng tiền: @Model.CalcMoney.ToString("n0")</span>*@
+                    <span class="label label-info">Không dự đoán: @Model.NotPredict</span>
+                </div>
+                <div class="table-container">
+                    <table class="table table-bordered table-hover table-striped table-center">
+                        <tr>
+                            <th>#</th>
+                            <th style="text-align:left;">Trận</th>
+                            @*<th>Kèo</th>*@
+                            <th>Tỷ số</th>
+                            <th>Kết quả</th>
+                            @if (ViewBag.AllowBetStar == true)
+                            {
+                <th>Đặt <span class="glyphicon glyphicon-star" style="color: gold"></span></th>}
+
+
+                            <th>Điểm</th>
+                            @if (ViewBag.AllowBetMoney == true)
+                            {
+                <th>Tiền</th>
+}
+                        </tr>
+                        @foreach (var item in Model.UserPredicts)
+                        {
+                            var homeWin = @item.HomeWin ? "label label-primary" : "";
+                            var awayWin = @item.AwayWin ? "label label-primary" : "";
+            <tr>
+                <td>@item.No</td>
+                <td style="text-align:left;">
+                    <a href="@Url.Action("Detail", "Prediction", new { Id = @item.MatchId })">
+                        <span class="@homeWin">@item.HomeName</span> vs <span class="@awayWin">@item.AwayName</span>
+                    </a>
+                    @if (item.IsScore == true && item.IsExpire == false)
+                    {
+                <span title="Tỉ số dự đoán" class="label label-warning" style="color:#fff;font-weight:400">[@item.HomeGoalPre-@item.AwayGoalPre]</span>}
+                </td>
+                @if (@item.IsExpire == false)
+                {
+            <td>
+                <span title="Tỉ số trận đấu">-</span>                
+            </td> 
+            }else
+                            {
+            <td>
+                <span title="Tỉ số trận đấu" style="color:#527ef6;">@item.HomeGoal-@item.AwayGoal</span>
+                @if (item.IsScore == true)
+                {
+                    var is_winScore = (item.HomeGoalPre == item.HomeGoal && item.AwayGoalPre == item.AwayGoal) ? "label label-success" : "label label-danger";
+            <br /><span title="Tỉ số dự đoán" class="@is_winScore" style="color: #fff; font-weight:400; white-space:nowrap;">[@item.HomeGoalPre-@item.AwayGoalPre]</span>}
+            </td>}
+                <td>
+                    @{ var kq = item.IsWin? "Thắng" : item.IsDraw ? "Hòa" : item.IsLoose ? "Thua" : "";
+                        var cls = item.IsWin ? "success" : item.IsDraw ? "warning" : item.IsLoose ? "danger":""; }
+                    @if (@item.IsExpire == true)
+                    {
+            <span class="label label-@cls">@kq</span> }
+        else
+        {
+            <span>-</span>}
+                </td>
+                @if (ViewBag.AllowBetStar == true)
+                {
+            <td style="text-align: center">
+                @if (@item.IsStar)
+                {
+            <span title="Ngôi sao hy vọng" class="glyphicon glyphicon-star" style="color: gold"></span>}
+                @if (@item.IsDollar)
+                {
+            <span title="Đô la hy vọng" class="glyphicon glyphicon-usd" style="color: gold"></span>}
+                @if (@item.StarDisabled)
+                {
+            <span title="Ngôi sao hy vọng không được áp dụng do bạn nằm trong rule top điểm" class="glyphicon glyphicon-star" style="color: silver"></span>}
+            </td>
+}
+
+
+                @if (@item.IsExpire == false)
+                {
+            <td>-</td>
+ if (ViewBag.AllowBetMoney == true)
+                                {
+            <td>-</td> }
+                            }
+                            else
+                            {
+            <td><span class="lb-link">@item.Point</span></td> if (ViewBag.AllowBetMoney == true)
+                                {
+            <td>@item.CalcMoney.ToString("n0")</td>
+}
+    }
+            </tr>}
+                    </table>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+

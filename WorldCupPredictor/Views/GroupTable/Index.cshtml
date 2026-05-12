@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "Bảng đấu";
+}
+
+<table height="100%" width="100%" style="margin-top:20px;">    
+    <tr>
+        <td align="center" valign="center">                                               
+            @foreach (var group in Model)
+            {
+                <div class="panel panel-success table-container">         
+                <div class="panel-heading" style="font-size: 25px; font-weight: bold">@group.Stage.ToUpper()</div>                
+                    <table class="table table-bordered table-striped">
+                        @if (group.MatchCalcs != null)
+                        {
+                            <tr>
+                                <th>Đội</th>
+                                <th style="width: 70px">Đã đấu</th>
+                                <th>Thắng</th>
+                                <th>Hòa</th>
+                                <th>Thua</th>
+                                <th class="m-hide" style="width: 70px">Ghi bàn</th>
+                                <th class="m-hide" style="width: 70px">Vào lưới</th>
+                                <th class="m-hide" style="width: 70px">Hiệu số</th>
+                                <th>Điểm</th>
+                            </tr>
+                            foreach (var item in group.MatchCalcs)
+                            {
+                                var GP = item.W + item.D + item.L;
+                                <tr>
+                                    <td style="width: 250px"><img src="~/Content/images/@item.TeamCountry" width="50"/><a href="@item.TeamUrl">&nbsp;@item.TeamName</a></td>
+                                    <td style="font-weight: bold">@GP</td>
+                                    <td style="font-weight: bold">@item.W</td>
+                                    <td style="font-weight: bold">@item.D</td>
+                                    <td style="font-weight: bold">@item.L</td>
+                                    <td class="m-hide" style="font-weight: bold">@item.GF</td>
+                                    <td class="m-hide" style="font-weight: bold">@item.GA</td>
+                                    <td class="m-hide" style="font-weight: bold">@item.GD</td>
+                                    <td style="font-weight: bold">@item.Point</td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                    <br/>
+                    <h4>Trận đấu trong @group.Stage.ToUpper()</h4>
+            <table>
+                @foreach (var item in group.Matches)
+                {
+                    var homeGoal = @item.IsExpire ? @item.HomeGoal : "";
+                    var awayGoal = @item.IsExpire ? @item.AwayGoal : "";
+
+                    <tr>
+                        <td style="width: 250px"><img src="~/Content/images/@item.HomeCountry" width="50"/><a href="@item.HomeUrl">&nbsp;@item.HomeName</a></td>
+                        <td style="font-size: 17px; font-weight: bold; text-align: center; width: 50px">@homeGoal</td>
+                        <td style="text-align: center">vs</td>
+                        <td style="font-size: 17px; font-weight: bold; text-align: center; width: 50px">@awayGoal</td>
+                        <td style="text-align: right; width: 250px;"><a href="@item.AwayUrl">@item.AwayName&nbsp;</a><img src="~/Content/images/@item.AwayCountry" width="50"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" style="text-align: center">
+                            <a href="@item.VenueUrl" alt="@item.VenueName"><span class="m-hide">@item.VenueStadium - </span></a> @item.MatchDate.ToString("dd/MM HH:mm") - 
+                            <img src="~/Content/images/predictions.png" />@Html.ActionLink("Chi tiết", "Detail", "Prediction", new { id = item.MatchId }, null)
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: solid; border-width: 1px">
+                        <td colspan="5"></td>
+                    </tr>
+                }
+            </table>
+                   </div>
+            }            
+        </td>
+    </tr>
+</table>

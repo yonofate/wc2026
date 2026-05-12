@@ -1,0 +1,5 @@
+- Kiểm tra đội thi đấu trong bản
+- Bổ sung các trận đấu
+- Lưu phòng ban
+- Hosting lên và thông báo đăng ký
+- pass admin: vantin@234

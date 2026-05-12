@@ -1,0 +1,262 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Nhà Tiên Tri Euro 2024</title>
+    <link rel="shortcut icon" href="~/favicon.ico" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+<style>
+    .navbar-brand {
+        padding: 8px 15px;
+        line-height: 32px;
+    }
+    ul.navbar-nav li.active > a{
+        background-color: #1cb304 !important;
+        background-image: none;
+    }
+    .navbar-nav > li > a:hover{
+        color:#eee !important;
+    }
+    .table-container {
+        width: 660px;
+    }
+    .ipu-num, .btn-input-bet {
+        border-color: #285e8e;
+    }
+    .lb-link {
+        padding-left: 10px;
+        padding-right: 10px;
+        color: #428bca;
+        font-size:16px;
+    }
+    .f-16{
+        font-size:16px;
+    }
+    .d-hide {
+        display: none;
+    }
+    .entry-content {
+        background-color: #fff;
+        padding: 25px 30px;
+        border-radius: 10px;
+        padding-top:40px;
+    }
+    body.img1 {
+        background-image: url('https://scontent.fsgn2-9.fna.fbcdn.net/v/t1.6435-9/201525533_4360907053962107_7452119942121115942_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEDefKAt8YA9xWIVCx0re90jwrYOVZQLCWPCtg5VlAsJWpP_JPyGkIwKamseGefuy4&_nc_ohc=RkYK14dEKckQ7kNvgHvC2Ye&_nc_ht=scontent.fsgn2-9.fna&oh=00_AYCcxLozVsfWhKsAZasRsopw_VTZwpmGcCxe5nJsNVXjgw&oe=6678306D');
+        background-size: cover;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    /* Hide the browser's default checkbox */
+    .container-me {
+        display: block;
+        font-weight: normal;
+        position: relative;
+        padding-left: 26px;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+        .container-me input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 22px;
+        width: 22px;
+        background-color: #fff;
+        border: solid 2px #3276b1;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container-me:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .container-me input:checked ~ .checkmark {
+        background-color: #3276b1;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .container-me input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .container-me .checkmark:after {
+        left: 6px;
+        top: 3px;
+        width: 7px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+
+    .star-btn {
+        font-size: 20px;
+        line-height: 26px;      
+    }
+
+    .btn-rating {
+        color: #afacac;
+        cursor: pointer;
+    }
+
+        .btn-rating:hover, .btn-rating.checked {
+            color: gold;
+        }
+
+        .btn-rating.disabled {
+            cursor: auto;
+        }
+
+@@media only screen and (min-width: 768px) and (max-width: 1024px) {
+    ul.nav.navbar-nav li:nth-child(1) {
+        display: none;
+    }
+    @@media screen and (max-width: 600px) {
+        .body-content {
+            padding-left: 5px;
+            padding-right: 5px;            
+        }
+        .entry-content {
+            padding: 10px;
+            border-radius: unset;
+            padding-top: 25px;
+        }
+        .m-hide{
+            display:none;
+        }
+        .d-hide{
+            display:inline-block;
+        }
+        iframe{
+            width:100% !important;
+        }
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .table-container table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .f-16 {
+            font-size: 13px;
+        }
+}
+    </style>
+</head>
+<body style="background-color: #f7f7f9">
+    @*<div id="fb-root"></div>
+        <script>
+            (function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = 'https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v3.0&appId=378816062625830&autoLogAppEvents=1';
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));</script>*@
+
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v20.0&appId=381308116792915" nonce="KBPpqofs"></script>
+
+    
+
+    <div class="navbar navbar-inverse nav-blue navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @*@Html.ActionLink("", "Index", "Home", null, new { @class = "navbar-brand d-hide" })*@
+                <a class="navbar-brand" href="/"><img style="height:28px;" src="~/Content/images/logo.avif" /></a>
+            </div>
+            @{ string currentController = ViewContext.RouteData.Values["controller"].ToString();
+                            string currentAction = ViewContext.RouteData.Values["action"].ToString();
+
+                            Func<string, string, string> isActive = (controller, action) =>
+                                controller == currentController && action == currentAction ? "active" : ""; }
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="@isActive("Home", "Index")">@Html.ActionLink("THỂ LỆ", "Index", "Home")</li>
+                    <li class="@isActive("Prediction", "Index")">@Html.ActionLink("DỰ ĐOÁN", "Index", "Prediction", new { filter = true }, null)</li>
+                    <li class="@isActive("Prediction", "User")">@Html.ActionLink("KẾT QUẢ DỰ ĐOÁN", "User", "Prediction")</li>
+                    <li class="@isActive("Ranking", "Index")">@Html.ActionLink("BẢNG XẾP HẠNG", "Index", "Ranking")</li>
+                    @if (ViewBag.AllowBetMoney == true)
+                    {
+        <li class="@isActive("Ranking", "Sponsor")">@Html.ActionLink("NHÀ TÀI TRỢ", "Sponsor", "Ranking")</li>
+}
+                    <li class="@isActive("Home", "Comment")">@Html.ActionLink("BÌNH LUẬN", "Comment", "Home")</li>
+                    <li class="@isActive("GroupTable", "Index")">@Html.ActionLink("BẢNG ĐẤU", "Index", "GroupTable")</li>
+                    @*@if (HttpContext.Current.User.Identity.Name == "05491")
+                {
+                    <li>@Html.ActionLink("ĐĂNG KÝ", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+                }*@
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    @*<div class="alert alert-warning" style="text-align: center">
+            User có số điểm >= (điểm top 1) - 2, ngôi sao hy vọng sẽ không được áp dụng (để cân bằng cuộc rượt đuổi). Dollar hy vọng vẫn áp dụng bình thường
+            <br/>VD: Điểm cao nhất là 80 điểm => các user có điểm từ 78 đến 80 điểm thì trận tiếp theo chiến thắng/thua sẽ không được áp dụng ngôi sao hy vọng.
+        </div>*@
+    <div class="container body-content">
+        @RenderBody()
+        <br />
+        <footer>
+            <p style="text-align: center">&copy; Euro @DateTime.Now.Year - by Gemadept Corp</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/toastr")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-197G4F3S52"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-197G4F3S52');
+</script>
+
+<!--<div style="position:relative;width:100%;text-align:center;pointer-events:none;">
+ <a href='http://www.freevisitorcounters.com'>Free Counters</a> <script async type='text/javascript' src='https://www.freevisitorcounters.com/auth.php?id=cf3a6ef4316a060b87ba96abdeb06b4738adc406'></script>
+<script async type="text/javascript" src="https://www.freevisitorcounters.com/en/home/counter/1189860/t/1"></script>
+</div>-->
+</body>
+
+</html>

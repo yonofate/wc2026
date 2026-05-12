@@ -1,0 +1,40 @@
+﻿@{ ViewBag.Title = "Create User List"; }
+@model List<WorldCupPredictor.Models.UserAccountTemp>
+<style>
+    select{
+        width:200px;
+        padding:5px;
+    }
+</style>
+
+
+<div style="font-size:18px !important;width:600px;margin:30px auto;">
+    <h4>Kết quả: <strong>@ViewBag.Success/@ViewBag.Total</strong></h4>
+
+    <br />
+    <strong>Lỗi:</strong>
+    <div style="margin-bottom:20px;">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">UserName</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Error</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>@item.UserName</td>
+                    <td>@item.Phone</td>
+                    <td>@item.Email</td>
+                    <td>@item.Error</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        
+    </div>
+</div>

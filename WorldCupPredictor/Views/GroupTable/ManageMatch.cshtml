@@ -1,0 +1,36 @@
+﻿@{ ViewBag.Title = "Bảng đấu"; }
+@model List<WorldCupPredictor.Models.MatchInStage>
+<style>
+    select{
+        width:200px;
+        padding:5px;
+    }
+</style>
+
+@{ 
+    var teams = (SelectList)ViewBag.Team;
+}
+<div style="font-size:18px !important;width:600px;margin:30px auto;">
+    <div style="margin-bottom:20px;">
+        @foreach (var s in ViewBag.Stages)
+        {
+            var cls = s.Id == ViewBag.StageId ? "label-primary" : "label-default";
+<a style="margin:0 5px;" class="label @cls" href="/grouptable/managematch?stageId=@s.Id">@s.Name</a>}
+    </div>
+    @using (Html.BeginForm())
+    {
+<div style="margin-bottom:20px;">
+    @for (int i = 0; i < Model.Count; i++)
+    {
+<div class="row" style="margin-bottom:10px;">
+    <div class="col-md-12">
+        <strong style="font-size:16px;margin-left:15px;">@Model[i].KickOff.Value.ToString("dd/MM HH:mm"):</strong>
+        @Html.HiddenFor(model => model[i].MatchId)
+        @Html.DropDownListFor(model => model[i].HomeTeamId, new SelectList(ViewBag.Team as IEnumerable<SelectListItem>, "Value", "Text", Model[i].HomeTeamId), "Chọn đội nhà")
+        vs
+        @Html.DropDownListFor(model => model[i].AwayTeamId, new SelectList(ViewBag.Team as IEnumerable<SelectListItem>, "Value", "Text", Model[i].AwayTeamId), "Chọn đội khách")
+    </div>
+</div>}
+</div>
+                <input type="submit" value="Lưu" /> }
+</div>

@@ -1,0 +1,475 @@
+﻿@{
+    ViewBag.Title = "Chi tiết dự đoán";
+}
+
+<style>
+    .logo-team{
+        width:68px;
+    }
+    .ipu-num {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+        text-align: center;
+        font-weight: bold;
+    }
+    .table-center tr th, .table-center tr td {
+        vertical-align: middle !important;
+    }
+    
+    
+    .container-dt{
+        width:650px;
+    }
+    .btn-sm{font-size:16px;}
+    .btn-input-bet{
+        width:90%;
+    }
+
+    .star-btn {
+        font-size: 24px;
+        line-height: 28px;
+    }
+
+    @@media screen and (max-width: 600px) {
+        .logo-team {
+            width: 48px;
+        }
+        .btn-sm {
+            font-size: 14px;
+        }
+        .btn-input-bet {
+            width: 100%;
+        }
+        table.match-detail th:first-child,
+        table.match-detail td:first-child {
+            display: none;
+        }
+        .sm-text{
+            font-size:12px;
+        }
+        .lb-link{
+            font-size:14px;
+        }
+    }
+</style>
+<br/>
+<br/>
+<table height=100% width=100%>
+    <tr>
+        <td align=center valign=center>
+            <div class="panel panel-success table-container">
+                <div class="panel-heading" style="font-size: 25px; text-align: center">Chi tiết trận đấu</div>
+                <table>
+                    @if (HttpContext.Current.User.Identity.Name == "05491" || HttpContext.Current.User.Identity.Name == "00067")
+                    {
+        <tr>
+            <td colspan="5" style="padding:10px;text-align:center;">
+                <input style="display:none;" type="button" class="btn btn-default btn-sm" value="UpdateHandicap" onclick="onSetHandicap(@Model.Match.MatchId)" />
+                <input class="ipu-num" type="text" id="homeGoal" size='4' />
+                <input class="ipu-num" type="text" id="awayGoal" size='4' />
+                <input type="button" class="btn btn-primary btn-sm" value="UpdateScore" onclick="onSetScore(@Model.Match.MatchId)" />
+            </td>
+        </tr>}
+                </table>
+
+                @{ var disabled = @Model.Match.IsExpire ? "disabled" : "";
+                    var starAllow = @ViewBag.AllowStar == false ? "hidden" : "";
+                    var readol = @Model.Match.IsExpire ? "readonly" : "";
+                    var checkStar = @Model.Match.IsStar == true ? "checked" : "";
+                    var chooseStar = @Model.Match.IsStar == true ? "btn-primary" : (@Model.Match.StarDisabled ? "btn-warning" : "");
+                    var chooseDollar = @Model.Match.IsDollar == true ? "btn-primary" : "";
+                    var notChoose = @Model.Match.IsStar == false && @Model.Match.IsDollar == false ? "btn-primary" : ""; }
+
+            <table class="table table-bordered table-hover match-detail table-center">
+                <tr>
+                    <td style="vertical-align:middle">Trận</td>
+                    <th style="text-align: center; font-size: 16px;width:35%"><img class="logo-team" src="~/Content/images/@Model.Match.HomeCountry" /><a href="@Model.Match.HomeUrl" target="_blank">&nbsp;@Model.Match.HomeName</a></th>
+                    <th style="text-align: center; vertical-align: middle;width:10%"> vs </th>
+                    <th style="text-align: center; font-size: 16px; width: 35%"><a href="@Model.Match.AwayUrl" target="_blank">@Model.Match.AwayName&nbsp;</a><img class="logo-team" src="~/Content/images/@Model.Match.AwayCountry" /></th>
+                </tr>
+                @*<tr>
+                @{ var homeHandicap = @Model.Match.IsOpen ? @Model.Match.HomeHandicap : "-";
+                    var awayHandicap = @Model.Match.IsOpen ? @Model.Match.AwayHandicap : "-";
+        <td>Kèo</td>
+                    <th style="text-align: center;font-size:16px;">@homeHandicap</th>
+                                <td style="text-align: center"> - </td>
+                                            <th style="text-align: center; font-size: 16px;">@awayHandicap</th> }
+            </tr>*@
+                <tr>
+                    @{ var homeGoal = @Model.Match.IsExpire ? @Model.Match.HomeGoal : "-";
+                        var awayGoal = @Model.Match.IsExpire ? @Model.Match.AwayGoal : "-";
+            <td>Tỷ số</td>
+                        <th style="text-align: center;font-size:16px;">@homeGoal</th>
+                                    <th style="text-align: center"> - </th>
+                                                <th style="text-align: center; font-size: 16px;">@awayGoal</th> }
+                </tr>
+                <tr>
+                    <td>Bảng</td>
+                    <th style="text-align: center" colspan="3"><a href="/GroupTable">@Model.Match.StageName</a></th>
+                </tr>
+                <tr>
+                    <td>Sân</td>
+                    <th style="text-align: center" colspan="3">@Model.Match.VenueStadium</th>
+                </tr>
+                <tr>
+                    <td>Thời gian</td>
+                    <th style="text-align: center" colspan="3">@Model.Match.MatchDate.ToString("dd/MM HH:mm")</th>
+                </tr>
+                <tr>
+                    <td>Luật</td>
+                    <th style="text-align: center" colspan="3">Toàn trận (2 hiệp chính + phụ + penalty)</th>
+                </tr>
+                @*<tr>
+            <td>Tiền cược</td>
+            <th style="text-align: center" colspan="3">
+                @{
+                    var addedMoney = Math.Max(@Model.Match.StarMoney, Model.Match.MoneyPerLoose);
+                }
+                @if (Model.Match.IsDollar)
+                {
+                    var dollarWin = @Model.Match.Dollar + Model.Match.MoneyPerWin;
+                    var dollarLoose = @Model.Match.Dollar + Model.Match.MoneyPerLoose;
+                    //var dollarLoose = @Model.Match.Dollar + addedMoney;
+                    <span>Thắng: </span><span style="color: blue">-@dollarWin.ToString("n0")</span>
+                    <span>- Hòa: @Model.Match.MoneyPerDraw.ToString("n0") -</span>
+                    <span>Thua: </span><span style="color: red">+@dollarLoose.ToString("n0")</span>
+                }
+                else
+                {
+                <span> @string.Format("Thắng: {0} - Hòa: +{1} - Thua: +{2}", @Model.Match.MoneyPerWin.ToString("n0"), @Model.Match.MoneyPerDraw.ToString("n0"), @Model.Match.MoneyPerLoose.ToString("n0")) </span>
+                }
+            </th>
+        </tr>*@
+                <tr>
+                    <td>Điểm</td>
+                    <th style="text-align: center" colspan="3">
+                        @{ var star = @Model.Match.StarPoint;
+                            var winPoint = @Model.Match.WinPoint; }
+                        @if (Model.Match.IsStar)
+                        {
+            <span>Thắng: </span><span style="color: blue">+@(winPoint + star)</span>
+                            <span>- Hòa: +1 -</span>
+                                            <span>Thua: </span><span style="color: red">@(0 - @star)</span> }
+                                        else
+                                        {
+                            <span>Thắng: +@winPoint - Hòa: +1 - Thua: 0</span>}
+                        <br /><span>Đúng tỉ số: +@Model.Match.ScorePoint - Sai: 0 </span>
+                    </th>
+                </tr>
+                <tr>
+                    <td colspan="4" style="text-align:center">
+                        @if (disabled == "disabled")
+                        {
+            <strong style="color:#ea0b0b">Trận này đã hết thời gian dự đoán.</strong>}
+                    </td>
+                </tr>
+                @*<tr>
+                                <td>Thêm chọn lựa</td>
+                                @if (ViewBag.AllowBetStar == true)
+                                {
+                        <th style="text-align: center"><input type="button" class="btn btn-default btn-sm @chooseStar @disabled" id="predict" value="Đặt ngôi sao hy vọng" onclick="onChooseStar(@Model.Match.MatchId)" /></th>
+                                        <th style="text-align: center"><input type="button" class="btn btn-default btn-sm @notChoose @disabled" id="predict" value="Không đặt" onclick="onNotChoose(@Model.Match.MatchId)" /></th>
+        }
+                                @if (ViewBag.AllowBetMoney == true)
+                                {
+                        <th style="text-align: center"><input type="button" class="btn btn-default btn-sm @chooseDollar @disabled" id="predict" value="Đặt đô la hy vọng" onclick="onChooseDollar(@Model.Match.MatchId)" /></th>}
+                            </tr>*@
+                <tr>
+                    <!--<tr>
+            <td>Dự đoán<br />tỉ số</td>
+            <td colspan="3" style="text-align: center">
+                <strong class="lb-link">@Model.Match.HomeName</strong><input @readol type="tel" placeholder="+" pattern="[0-9]" id="homeGoalPre" class="ipu-num @disabled" maxlength="1" value="@Model.Match.HomeGoalPre" inputmode="numeric" oninput="changeScore(@Model.Match.MatchId,this,'home')" onfocus="clearPlaceholder(this)" onblur="restorePlaceholder(this)" /> - <input @readol type="tel" placeholder="+" pattern="[0-9]{1}" id="awayGoalPre" class="ipu-num" value="@Model.Match.AwayGoalPre" inputmode="numeric" oninput="changeScore(@Model.Match.MatchId,this,'away')" onfocus="clearPlaceholder(this)" onblur="restorePlaceholder(this)" /><strong class="lb-link">@Model.Match.AwayName</strong>-->
+                    @*<input type="button" class="btn btn-default btn-sm @disabled" value="Xác nhận" onclick="onSetScorePreditor(@Model.Match.MatchId)" />*@
+                    <!--</td>-->
+                    @*<td style="text-align: center">
+            </td>*@
+                    <!--</tr>-->
+                </tr>
+                <tr>
+
+                    @{ var homeWin = @Model.Match.HomeWin ? "btn-primary" : "";
+                        var awayWin = @Model.Match.AwayWin ? "btn-primary" : "";
+                        var isBeted = homeWin + awayWin; }
+
+                    <td>Dự đoán<br />đội thắng</td>
+                    <input id="is_beted" type="hidden" value="@isBeted" />
+                    @if (@Model.Match.IsOpen && @Model.Match.IsExpire == false)
+                    {
+            <th style="text-align: center"><input type="button" class="btn-input-bet btn btn-default btn-sm @homeWin" id="predict" value="Theo @Model.Match.HomeName (@ViewBag.HomeWin%)" onclick="onPredictHome(@Model.Match.MatchId)" /></th>
+ }
+        else
+        {
+            <th style="text-align: center"><input type="button" class="btn btn-default btn-sm @homeWin disabled" value="Theo @Model.Match.HomeName (@ViewBag.HomeWin%)" /></th>}
+
+                <th style="vertical-align:middle;text-align:center;">
+                    @if (isBeted != "")
+                    {
+                <a id="ckIsChooseStar" class="btn-rating @checkStar @disabled @starAllow" onclick="onChooseStar_Check(@Model.Match.MatchId)"><span title="Chọn ngôi sao hy vọng" class="glyphicon glyphicon-star star-btn"></span></a> 
+                @*<label title="Đặt ngôi sao hy vọng" class="container-me @starAllow">
+        <span title="Ngôi sao hy vọng" class="glyphicon glyphicon-star" style="color:gold;font-size:16px;"></span>
+        <input @disabled id="ckIsChooseStar" type="checkbox" @checkStar onchange="onChooseStar_Check(@Model.Match.MatchId)">
+        <span class="checkmark"></span>
+    </label>*@
+                    }
+                </th>
+                    @*<th style="text-align: center">Chưa theo kèo <span style="color: blue">(@ViewBag.NotPredict%)</span></th>*@
+
+                    @if (@Model.Match.IsOpen && @Model.Match.IsExpire == false)
+                    {
+            <th style="text-align: center"><input type="button" class="btn-input-bet btn btn-default btn-sm @awayWin" id="predict" value="Theo @Model.Match.AwayName (@ViewBag.AwayWin%)" onclick="onPredictAway(@Model.Match.MatchId) " /></th>
+ }
+        else
+        {
+            <th style="text-align: center"><input type="button" class="btn btn-default btn-sm @awayWin disabled" value="Theo @Model.Match.AwayName (@ViewBag.AwayWin%)" /></th>}
+                </tr>
+
+                @if (isBeted != "")
+                {
+            <tr>
+                <td>Dự đoán<br />tỉ số</td>
+                <td colspan="3" style="text-align: center">
+                    <strong class="lb-link">@Model.Match.HomeName</strong><input @disabled @readol type="tel" placeholder="+" pattern="[0-9]" id="homeGoalPre" class="ipu-num @disabled" maxlength="1" value="@Model.Match.HomeGoalPre" inputmode="numeric" oninput="changeScore(@Model.Match.MatchId,this,'home')" onfocus="clearPlaceholder(this)" onblur="restorePlaceholder(this)" /> <input style="margin-left:5px;" @disabled @readol type="tel" placeholder="+" pattern="[0-9]{1}" id="awayGoalPre" class="ipu-num" value="@Model.Match.AwayGoalPre" inputmode="numeric" oninput="changeScore(@Model.Match.MatchId,this,'away')" onfocus="clearPlaceholder(this)" onblur="restorePlaceholder(this)" /><strong class="lb-link">@Model.Match.AwayName</strong>
+                    @*<input type="button" class="btn btn-default btn-sm @disabled" value="Xác nhận" onclick="onSetScorePreditor(@Model.Match.MatchId)" />*@
+                </td>
+                @*<td style="text-align: center">
+        </td>*@
+            </tr>
+            <tr class="sm-text" style="display:none;">
+                <td></td>
+                @*Ẩn kết quả chọn của người dùng ở vòng 16*@
+                @if (@Model.Match.IsOpen && @Model.Match.IsExpire == false && @Model.Match.MatchId > 37)
+                {
+            <td style="text-align: center"><i>(hiển thị sau trận đấu)</i></td>
+                                <td style="text-align: center">
+                                    @foreach (var item in @Model.NotPredicts)
+                                    {
+                <div style="padding-top: 3px"><a href="@Url.Action("User", "Prediction", new { userName = item.UserName })">@item.UserName</a>  </div>}
+                                </td>
+                                                    <td style="text-align: center"><i>(hiển thị sau trận đấu)</i></td> }
+                else
+                {
+                                                    <td style="text-align: left">
+                                                        @foreach (var item in @Model.HomeWins)
+                                                        {
+                                    <div style="padding-top: 3px">
+                                        <a href="@Url.Action("User", "Prediction", new { userName = item.UserName })">
+                                            @item.FullName 
+                                            @*(@item.Department)*@
+                                            @if (@item.IsStar)
+                                            {
+                    <span title="Ngôi sao hy vọng" class="glyphicon glyphicon-star" style="color: gold"></span>}
+                                            @if (@item.IsDollar)
+                                            {
+                    <span title="Đô la hy vọng" class="glyphicon glyphicon-usd" style="color: gold"></span>}
+                                            @if (@item.StarDisabled)
+                                            {
+                    <span title="Ngôi sao hy vọng không được áp dụng do bạn nằm trong rule top điểm" class="glyphicon glyphicon-star" style="color: silver"></span>}
+                                        </a>
+
+                                    </div>}
+                                                    </td>
+                                                                        <td style="text-align: center">
+                                                                            @*@foreach (var item in @Model.NotPredicts)
+                                                                                    {
+                                                                    <div style="padding-top: 3px"><a href="@Url.Action("User", "Prediction", new { userName = item.UserName })">@item.UserName</a>  </div>}*@
+                                                                        </td>
+                                                                                            <td style="text-align: left">
+                                                                                                @foreach (var item in @Model.AwayWins)
+                                                                                                {
+                                                                            <div style="padding-top: 3px">
+                                                                                <a href="@Url.Action("User", "Prediction", new { userName = item.UserName })">
+                                                                                    @item.FullName 
+                                                                                    @*(@item.Department)*@
+                                                                                    @if (@item.IsStar)
+                                                                                    {
+                                                            <span title="Ngôi sao hy vọng" class="glyphicon glyphicon-star" style="color: gold"></span>}
+                                                                                    @if (@item.IsDollar)
+                                                                                    {
+                                                            <span title="Đô la hy vọng" class="glyphicon glyphicon-usd" style="color: gold"></span>}
+                                                                                    @if (@item.StarDisabled)
+                                                                                    {
+                                                            <span title="Ngôi sao hy vọng không được áp dụng do bạn nằm trong rule top điểm" class="glyphicon glyphicon-star" style="color: silver"></span>}
+                                                                                </a>
+
+                                                                            </div>}
+
+                                                                                            </td>}
+            </tr>
+                    }
+                        </table>
+                <br />
+                <hr />
+
+                <div class="fb-comments" data-href="https://eu24.gemadept.com.vn/Prediction/Detail/@Model.Match.MatchId" data-width="600" data-numposts="5" data-order-by="reverse_time"></div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+    function clearPlaceholder(input) {
+                    input.placeholder = '';
+                }
+
+                function restorePlaceholder(input) {
+                    if (input.value === '') {
+                        input.placeholder = '+';
+                    }
+                }
+
+                function onSetScorePreditor(matchId) {
+                    var homeGoal = $('#homeGoalPre').val();
+                    var awayGoal = $('#awayGoalPre').val();
+                    if (homeGoal == "" || awayGoal == "") {
+                        alert("Bạn chưa chọn tỉ số!");
+                        return;
+                    }
+        $.ajax({
+                    type: "POST",
+            url: '@Url.Action("SetScorePreditor", "Prediction")',
+            dataType: "json",
+            data: { matchId: matchId, homeGoal: homeGoal, awayGoal: awayGoal },
+            success: function (data) {
+                if (data == 1) {
+                    toastr.success("Đã xác nhận tỉ số!");
+                } else if (data == 2) {
+                    toastr.success("Đã xác nhận tỉ số!");
+                    alert('Hệ thống ghi nhận bạn đã chọn tỉ số ngược với đội theo, nếu muốn bạn có thể chọn lại!');
+                }
+                else if (data == 3) {
+                    alert('Vòng loại trực tiếp sẽ không có tỉ số hòa, hãy chọn lại!')
+                } else {
+                                toastr.error("Thông tin cập nhật không hợp lệ!");
+                            }
+                        },
+            error: errorFunc
+        });
+                }
+
+                function changeScore(matchId,current, from) {
+                    current.value = current.value.replace(/[^0-9]/g, '').slice(0, 1);
+                    if (current.value.length === 1) {
+                        var otherObj = from == 'home' ? $('#awayGoalPre') : $('#homeGoalPre');
+                        var otherValue = otherObj.val();
+                        if ((otherValue || '').length == 0) {
+                            otherObj.focus();
+                        } else {
+                            onSetScorePreditor(matchId);
+                        }
+                    }
+                }
+
+                function onSetScore(matchId) {
+                    var homeGoal = $('#homeGoal').val();
+                    var awayGoal = $('#awayGoal').val();
+        $.ajax({
+                    type: "POST",
+            url: '@Url.Action("SetScrore", "Prediction")',
+            dataType: "json",
+            data: { matchId: matchId, homeGoal: homeGoal, awayGoal: awayGoal },
+            success: successFunc,
+            error: errorFunc
+        });
+                }
+
+                function onSetHandicap(matchId) {
+                    var homeGoal = $('#homeGoal').val();
+                    var awayGoal = $('#awayGoal').val();
+        $.ajax({
+                    type: "POST",
+            url: '@Url.Action("SetHandicap", "Prediction")',
+            dataType: "json",
+            data: { matchId: matchId, homeHandicap: homeGoal, awayHandicap: awayGoal },
+            success: successFunc,
+            error: errorFunc
+        });
+                }
+
+                function successFunc(data) {
+                    if (data == 1) {
+                        // toastr.success("Đã xác nhận dự đoán của bạn!");
+                        window.location.reload(true);
+                    }
+                    else if (data == 2) {                       
+                        alert('Hệ thống ghi nhận bạn đã chọn tỉ số ngược với đội theo, nếu muốn bạn có thể chọn lại!');
+                        window.location.reload(true);
+                    }
+                    else {
+                        //toastr.error("Trận đấu này đã hết thời hạn dự đoán!");
+                        alert('Trận đấu này đã hết thời hạn dự đoán');
+                    }
+
+                }
+
+                function errorFunc() {
+                    //toastr.error("Đã có lỗi xảy ra, vui lòng liên hệ quản trị!");
+                    alert('Trận đấu này đã hết thời hạn dự đoán!');
+                }
+
+                function onPredictHome(matchId) {
+                    onPredict(matchId, 1);
+                }
+
+                function onPredictAway(matchId) {
+                    onPredict(matchId, 2);
+                }
+
+                function onChooseStar_Check(matchId) {
+                    if (($("#is_beted").val() || '') == '') {
+                        alert('Chọn đội thắng trước!');
+                    $('#ckIsChooseStar').prop('checked', false);
+                        return;
+                    }
+                    var t = $('#ckIsChooseStar').hasClass('checked') == true ? 3 : 1;
+                    onHope(matchId, t);
+                }
+
+                function onChooseStar(matchId) {
+                    onHope(matchId, 1);
+                }
+
+                function onChooseDollar(matchId) {
+                    onHope(matchId, 2);
+                }
+
+                function onNotChoose(matchId) {
+                    onHope(matchId, 3);
+                }
+
+                function onHope(matchId, type) {
+                    var res = true;
+                    if (type == 1) res = confirm("Xác nhận đặt ngôi sao hy vọng! ");
+                    if (res == false) $('#ckIsChooseStar').removeClass('checked');
+                    else {
+            $.ajax({
+                        type: "POST",
+                url: '@Url.Action("Hope", "Prediction")',
+                dataType: "json",
+                data: { matchId: matchId, type: type },
+                success: function (res) {
+                    if (res.code == 0) {
+                        $('#ckIsChooseStar').removeClass('checked');
+                        if (res.msg) alert(res.msg);
+                    } else {
+                        if (type == 1) $('#ckIsChooseStar').addClass('checked');
+                        else $('#ckIsChooseStar').removeClass('checked');
+                    }
+                                window.location.reload(true);
+                            },
+                error: errorFunc
+            });
+                    }
+                }
+
+                function onPredict(matchId, type) {
+        $.ajax({
+                    type: "POST",
+            url: '@Url.Action("Predict", "Prediction")',
+            dataType: "json",
+            data: { matchId: matchId, type: type },
+            success: successFunc,
+            error: errorFunc
+        });
+                }
+</script>

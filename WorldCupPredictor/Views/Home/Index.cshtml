@@ -1,0 +1,145 @@
+﻿@{ ViewBag.Title = "Thể lệ"; }
+<style>
+    .td-1 {
+        width: 125px;
+    }
+
+    .td-2 {
+        width: 135px;
+    }
+
+    @@media screen and (max-width: 600px) {
+        .td-1, .td-2 {
+            width: auto;
+        }
+    }
+</style>
+<div>
+    <img style="margin:0 auto;max-width:100%" src="~/Content/images/banner_home.jpg" />
+
+    <div class="entry-content">
+        <h2 style="text-transform: uppercase; margin-bottom: 20px; color: #0094ff;">Thể lệ chương trình</h2>
+        <ol style="margin-left: -15px;">
+            <li>Đối tượng tham gia: tất cả CBNV thuộc Tập đoàn và đơn vị (Danh sách tham gia do phòng HR cung cấp)</li>
+
+            <li>Địa chỉ tham gia dự đoán:&nbsp;<a href="https://eu24.gemadept.com.vn/Prediction?filter=True">https://eu24.gemadept.com.vn</a></li>
+
+            <li>Bạn cần đăng nhập tài khoản thành công trước khi dự đoán. Tài khoản truy cập sẽ được gửi đến email của từng CBNV.</li>
+
+            <li>Bạn có thể tham gia dự đoán tất cả các trận đấu diễn ra trong thời gian từ <strong>14/06/24</strong> đến <strong>14/07/24</strong>,</li>
+
+            <li>Bạn có thể dự đoán / thay đổi kết quả dự đoán trước giờ bóng lăn</li>
+
+            <li>
+                Cách tính điểm:&nbsp;<br />
+                Sau khi BTC cập nhật kết quả trận đấu, điểm sẽ được tự động tính cho mỗi người đã dự đoán, bao gồm:<br />
+                <strong><u>Điểm dự đoán đội thắng + Điểm ngôi sao hy vọng (nếu có đặt) + Điểm dự đoán tỷ số.</u></strong>
+            </li>
+        </ol>
+
+        <div style="padding:5px;background-color:#f8fcd0">
+            <p>Khi giải đấu kết thúc, những người chơi có thứ hạng cao nhất sẽ đạt giải (theo cơ cấu giải thưởng).</p>
+
+            <p>Trường hợp đồng điểm sẽ phân biệt thứ hạng bằng các tiêu chí: tổng số dự đoán trận thắng đúng (ưu tiên 1), tổng số dự đoán tỷ số đúng (ưu tiên 2), tổng số trận tham gia dự đoán (ưu tiên 3), thời gian dự đoán cuối cùng của trận đấu vừa kết thúc (ưu tiên 4)</p>
+            <strong>Lưu ý:</strong> Ưu tiên 1, 2, 3: cao hơn xếp hạng trên. Ưu tiên 4: sớm hơn xếp hạng trên
+        </div>
+        <p></p>
+
+        <strong>Hướng dẫn cách dự đoán</strong>
+        <p><img src="~/Content/images/huong_dan.png" style="width:100%;" /></p>
+
+        <p>Người chơi vào trang Dự đoán:</p>
+        <ol>
+            <li>Dự đoán theo đội: click chọn đội muốn theo, đội được chọn sẽ tô đậm <br />Click chọn ngôi sao hy vọng nếu muốn, sau khi xác nhận ngôi sao chuyển sang màu vàng.</li>
+            <li>Dự đoán tỷ số: nhập dự đoán tỷ số của trận đó<br />Các dự đoán tự động được lưu. Có thể click Chi tiết để xem lại.</li>
+        </ol>
+
+        <p>Để tăng độ hấp dẫn, điểm thưởng dự đoán ở mỗi vòng đấu sẽ thay đổi theo hướng tăng dần.</p>
+        <p><strong>Bảng tính điểm</strong></p>
+        <figure class="wp-block-table">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="td-1"><strong>Cách tính điểm</strong></td>
+                        <td class="td-2"><strong>Dự đoán theo đội</strong></td>
+                        <td><strong>Chọn ngôi sao hy vọng cho dự đoán theo đội</strong><br />(Mỗi CBNV có 3 ngôi sao hy vọng, được dùng từ vòng Tứ kết)</td>
+                        <td><strong>Dự đoán tỷ số</strong><br />(Tính đến hết trận đấu, bao gồm penalty)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Vòng bảng</strong><strong></strong></td>
+                        <td>Thắng +3, Hòa +1</td>
+                        <td>&nbsp;</td>
+                        <td>Đúng +2</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Vòng 1/8</strong></td>
+                        <td>Thắng +6</td>
+                        <td>&nbsp;</td>
+                        <td>Đúng +4</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Vòng Tứ kết</strong><strong></strong></td>
+                        <td>Thắng +8</td>
+                        <td>Thắng +8, Thua -8</td>
+                        <td>Đúng +6</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Vòng Bán kết</strong><strong></strong></td>
+                        <td>Thắng +10</td>
+                        <td>Thắng +10, Thua -10</td>
+                        <td>Đúng +8</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Chung kết</strong><strong></strong></td>
+                        <td>Thắng +15</td>
+                        <td>Thắng +15, Thua -15</td>
+                        <td>Đúng +10</td>
+                    </tr>
+                </tbody>
+            </table>
+        </figure>
+
+        <strong>Giải thích 1 trận đấu vòng tứ kết:</strong>
+        <p>
+            – Người chơi theo đúng đội thắng thì được +8 điểm, nếu có chọn ngôi sao hy vọng thì +8 điểm. Tổng cộng phần dự đoán theo đội là 16 điểm.<br />
+            – Người chơi theo đội thua thì được +0 điểm, nếu có chọn ngôi sao hy vọng thì -8 điểm. Tổng cộng phần dự đoán theo đội là -8 điểm.<br />
+            – Người chơi nếu không chọn ngôi sao hy vọng thì chỉ tính điểm Dự đoán theo đội.<br />
+            – Người chơi nếu đoán đúng tỷ số thì được +6, sai 0 điểm (không bị trừ).<br />
+        </p>
+
+        <strong>
+            Giải thích tỷ số trận đấu có Penalty
+        </strong>
+        <p>
+            Nếu sau 90p hay 120p kết quả hòa 2-2. Sau đó đá penalty, kết quả là 5-2. Thì tỷ số cuối cùng là 7-4, tỷ số này là căn cứ so sánh với dự đoán tỷ số của người chơi để tính điểm dự đoán.
+        </p>
+
+        <p><strong>Kết quả sẽ được công bố chính thức trên&nbsp;Bản tin nội bộ Tập đoàn:</strong> <a target="_blank" href="https://gmdcorp.sharepoint.com/sites/Bantinnoibo">https://gmdcorp.sharepoint.com/sites/Bantinnoibo</a></p>
+
+        <p>
+            <strong><u>Cơ cấu giải thưởng:</u></strong>
+        </p>
+
+        <ul>
+            <li><strong>01</strong>&nbsp;giải nhất trị giá:&nbsp;<strong>10.000.000</strong>&nbsp;VND</li>
+
+            <li><strong>01</strong>&nbsp;giải nhì trị giá:&nbsp;<strong>7.500.000</strong>&nbsp;VND</li>
+
+            <li><strong>01</strong>&nbsp;giải ba trị giá:&nbsp;<strong>5.000.000</strong>&nbsp;VND</li>
+
+            <li><strong>20</strong>&nbsp;giải khuyến khích trị giá:&nbsp;<strong>1.000.000</strong>&nbsp;VND</li>
+        </ul>
+
+        <p>
+            <strong><u>Lưu ý</u></strong>: nếu đồng hạng thì chia đều giải thưởng.
+        </p>
+
+        <p>
+            <strong><u>Điều khoản:</u></strong>
+        </p>
+
+        <p>CBNV tham gia chương trình chấp nhận tuân thủ theo Thể lệ đã ban hành.</p>
+    </div>
+
+
+</div>

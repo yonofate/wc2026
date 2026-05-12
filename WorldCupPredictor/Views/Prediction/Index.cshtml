@@ -1,0 +1,366 @@
+﻿@{
+    ViewBag.Title = "Dự đoán";
+}
+
+<style>
+    .ipu-num {
+        width: 46px;
+        height: 46px;
+        font-size: 22px;
+        text-align: center;
+        font-weight: bold;
+    }
+    
+    .container-me {
+        margin-bottom: 0;
+    }
+    .pre-board {
+        width: 100%;
+    }
+        .pre-board.beted {
+            background-color: #eef8f8;
+        }
+        .btn-sm {
+            font-size: 13px;
+        }
+    .pre-board {
+        margin: 0px auto;
+    }
+    .sup-k sup {
+        top: -1.5em;
+        left: 3px;
+        font-size:85%;
+    }
+    .sup-k span {
+        position:relative;
+        left: -9px;
+    }
+        .pre-board tr:last-child {
+            border-bottom: solid;
+            border-width: 10px;
+            border-color: rgb(247, 247, 249);
+        }
+
+
+    .link-detail {
+        line-height: 28px;
+    }
+    .left .btn-rating {
+        float: left;
+        margin-left: 12px;
+    }
+    .right .btn-rating {
+        float: right;
+        margin-right: 12px;      
+    }
+    
+    .right .link-detail.has-star {
+        margin-right: -24px;
+    }
+    .left .link-detail.has-star {
+        margin-left: -24px;
+    }
+    .f-16{
+        font-size:18px;
+    }
+    .btn-input-bet {
+        width:152px;
+        font-size:16px;
+    }
+    .f-35{
+        width:35%;
+    }
+    .f-14{
+        width:14%;
+    }
+    @@media screen and (max-width: 600px) {
+        .btn-sm, .sm-m {
+            font-size: 12px;
+        }
+        .team-logo{
+            width:50px;
+        }
+        .f-16 {
+            font-size: 15px;
+        }
+        .f-35 {
+            width: 39%;
+        }
+
+        .f-14 {
+            width: 11%;
+        }
+        .ipu-num{
+            width:36px;
+            height:36px;
+            font-size:18px;
+        }
+        .btn-input-bet {
+            /*16 sua 110px*/
+            width: 125px;
+        }
+
+        .left .btn-rating {
+            float: left;
+            margin-left: 5px;
+        }
+
+        .right .btn-rating {
+            float: right;
+            margin-right: 5px;
+        }
+
+        .right .link-detail.has-star {
+            margin-right: -10px;
+        }
+
+        .left .link-detail.has-star {
+            margin-left: -10px;
+        }
+    }
+</style>
+<table height=100% width=100%>    
+    <tr>        
+        <td align="center" valign="middle">
+            @*<div class="panel panel-success table-container table-center">
+                <div class="panel-heading" style="font-size: 25px; text-align: center">Dự đoán</div>
+                <div class="panel-body">
+                    <p style="margin:10px auto">
+                        @if (ViewBag.Filter == null)
+                        {
+            @Html.ActionLink(">>> Trận sắp tới <<<", "Index", "Prediction", new { filter = true }, null) }
+        else
+        {
+        @Html.ActionLink(">>> Tất cả các trận <<<", "Index", "Prediction")}
+                    </p>
+                </div>
+                </div>*@
+            <p style="margin:10px auto">
+                @if (ViewBag.Filter == null)
+                {
+        @Html.ActionLink(">>> Trận sắp tới <<<", "Index", "Prediction", new { filter = true }, null) }
+    else
+    {
+        @Html.ActionLink(">>> Tất cả các trận <<<", "Index", "Prediction")}
+            </p>
+            @foreach (var group in Model)
+            {
+        <div class="panel panel-success table-container">
+            <div class="panel-heading" style="font-size: 25px; font-weight: bold">Ngày @group.Date.ToString("dd/MM")</div>
+            @{ var idx = 0;
+                var tt = group.Matches.Count; }
+            @foreach (var item in group.Matches)
+            {
+                idx = idx + 1;
+                var disabled = @item.IsExpire ? "disabled" : "";
+                var homeWin = @item.HomeWin ? "btn-primary" : "";
+                var awayWin = @item.AwayWin ? "btn-primary" : "";
+
+                var homeScore = @item.IsExpire ? @item.HomeGoal : "";
+                var awayScore = @item.IsExpire ? @item.AwayGoal : "";
+                var readol = "";
+                var isBeted = (@item.HomeWin == true || @item.AwayWin == true);
+                var isBetedActive = (@item.HomeWin == true || @item.AwayWin == true) ? "beted" : "";
+                var isBetedView = (@item.HomeWin == true || @item.AwayWin == true) ? "" : "hidden";
+                var isNotBetedView = (@item.HomeWin == true || @item.AwayWin == true) ? "hidden" : "";
+                var starAllow = @ViewBag.AllowStar == false ? "hidden" : "";
+                var hasStar = @ViewBag.AllowStar == false ? "" : "has-star";
+                var checkStar = @item.IsStar == true ? "checked" : "";
+                var align = @item.HomeWin == true ? "left" : @item.AwayWin == true ? "right" : "center";
+
+        <table class="pre-board @isBetedActive">
+            <tr>
+                <td colspan="5" style="text-align: center;padding:5px;"><strong style="text-transform:uppercase">@item.StageName</strong>: <span>@item.VenueName -</span> <strong>@item.MatchDate.ToString("HH:mm")</strong></td>
+            </tr>
+            <tr>
+                <td style="text-align:left;" class="f-35"><img class="team-logo" src="~/Content/images/@item.HomeCountry" width="60" /><a class="f-16" href="@item.HomeUrl" target="_blank">&nbsp;@item.HomeName</a></td>
+                @if (@item.IsExpire == true)
+                {
+        <td style="font-size: 17px; font-weight: bold; text-align: center; width: 70px">@homeScore</td> @*<td style="text-align: center" class="sup-k"><sup>kèo</sup><span>-</span></td>*@
+                                <td style="text-align:center;"><span>vs</span><br /></td>
+                                                        <td style="font-size: 17px; font-weight: bold; text-align: center; width: 70px">@awayScore</td>
+                }
+                else
+                {
+                                <td style="text-align: right;" class="f-14 @isBetedView">
+                                    <input @readol type="tel" required placeholder="+" pattern="[0-9]" id="homeGoalPre_@item.MatchId" class="ipu-num @disabled" maxlength="1" value="@item.HomeGoalPre" inputmode="numeric" oninput="changeScore(@item.MatchId,this,'home')" onfocus="clearPlaceholder(this)" onblur="restorePlaceholder(this)" />
+                                </td>
+                                                        <td style="text-align: center;"><span class="@isNotBetedView">vs</span></td>
+                                                                                <td style="text-align: left;" class="f-14 @isBetedView">
+                                                                                    <input @readol type="tel" required placeholder="+" pattern="[0-9]{1}" id="awayGoalPre_@item.MatchId" class="ipu-num @disabled" value="@item.AwayGoalPre" inputmode="numeric" oninput="changeScore(@item.MatchId,this,'away')" onfocus="clearPlaceholder(this)" onblur="restorePlaceholder(this)" />
+                                                                                </td>
+                }
+                <td style="text-align: right;" class="f-35"><a class="f-16" href="@item.AwayUrl" target="_blank">@item.AwayName&nbsp;</a><img class="team-logo" src="~/Content/images/@item.AwayCountry" width="60" /></td>
+            </tr>
+
+            <tr>
+                @if (@item.IsOpen)
+                {
+        <td colspan="5" style="text-align:center;padding-top:5px;padding-bottom:5px;" class="@align">
+            <input style="margin-left:5px;float:left;" type="button" class="btn-input-bet btn btn-default btn-sm @homeWin @disabled" id=" predict" value="Theo @item.HomeName" onclick="onPredictHome(@item.MatchId) " />
+            <input style="margin-right:5px;float:right;" type="button" class="btn-input-bet btn btn-default btn-sm @awayWin @disabled" id="predict" value="Theo @item.AwayName" onclick="onPredictAway(@item.MatchId) " />
+            @if (isBeted == true)
+            {
+        <a id="ckIsChooseStar_@item.MatchId" class="btn-rating @checkStar @disabled @starAllow" onclick="onChooseStar_Check(@item.MatchId)"><span title="Chọn ngôi sao hy vọng" class="glyphicon glyphicon-star star-btn"></span></a>}
+            <a class="link-detail @hasStar @checkStar" href="/prediction/detail/@item.MatchId"><img src="~/Content/images/predictions.png" /> Chi tiết</a>
+
+
+
+        </td> }
+                            else
+                            {
+        <td></td>
+}
+            </tr>
+
+            @*@if (item.IsExpire == false)
+            {
+        <tr>
+            <td colspan="5" style="text-align: center;padding:0px 8px;">
+            </td>
+        </tr>                    }*@
+            @if (idx < tt)
+            {
+        <tr>
+            <td colspan="5"></td>
+        </tr>
+ }
+    else
+    {
+        <tr style="display:none">
+            <td colspan="5"></td>
+        </tr>
+}
+
+        </table>}
+        </div>}
+        </td>
+            </tr>
+        </table>
+
+<script type="text/javascript">
+            function onPredictHome(matchId) {
+                onPredict(matchId, 1);
+            }
+
+            function onPredictAway(matchId) {
+                onPredict(matchId, 2);
+            }
+
+            function onPredict(matchId, type) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Predict", "Prediction")',
+                    dataType: "json",
+                    data: { matchId: matchId, type: type },
+                    success: successFunc,
+                    error: errorFunc
+                });
+            }
+
+            function successFunc(data) {
+                if (data == 1) {
+                   // toastr.success("Đã xác nhận dự đoán của bạn!");
+                    window.location.reload(true);
+                }
+                else if (data == 2) {
+                    window.location.reload(true);
+                    alert('Hệ thống ghi nhận bạn đã chọn tỉ số ngược với đội theo, nếu muốn bạn có thể chọn lại!');
+                }
+                else {
+                    //toastr.error("Trận đấu này đã hết thời hạn dự đoán!");
+                    alert('Trận đấu này đã hết thời hạn dự đoán');
+                }
+            }
+
+            function errorFunc() {
+                alert('Trận đấu này đã hết thời hạn dự đoán');
+                //toastr.error("Đã có lỗi xảy ra, vui lòng liên hệ quản trị!");
+            }
+
+            //-----------------------------------------------------
+
+            function clearPlaceholder(input) {
+                input.placeholder = '';
+            }
+
+            function restorePlaceholder(input) {
+                if (input.value === '') {
+                    input.placeholder = '+';
+                }
+            }
+
+            function onSetScorePreditor(matchId) {
+                var homeGoal = $('#homeGoalPre_' + matchId).val();
+                var awayGoal = $('#awayGoalPre_' + matchId).val();
+                if (homeGoal == "" || awayGoal == "") {
+                    alert("Bạn chưa chọn tỉ số!");
+                    return;
+                } 
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("SetScorePreditor", "Prediction")',
+                    dataType: "json",
+                    data: { matchId: matchId, homeGoal: homeGoal, awayGoal: awayGoal },
+                    success: function (data) {
+                        if (data == 1) {
+                            toastr.success("Đã xác nhận tỉ số!");
+                        } else if (data == 2) {
+                            toastr.success("Đã xác nhận tỉ số!");
+                            alert('Hệ thống ghi nhận bạn đã chọn tỉ số ngược với đội theo, nếu muốn bạn có thể chọn lại!');
+                        }
+                        else if (data == 3) {
+                            alert('Vòng loại trực tiếp sẽ không có tỉ số hòa, hãy chọn lại!')
+                        } else {
+                            toastr.error("Thông tin cập nhật không hợp lệ!");
+                        }
+                    },
+                    error: errorFunc
+                });
+            }
+
+            function changeScore(matchId, current, from) {
+                current.value = current.value.replace(/[^0-9]/g, '').slice(0, 1);
+                if (current.value.length === 1) {
+                    var otherObj = from == 'home' ? $('#awayGoalPre_' + matchId) : $('#homeGoalPre_' + matchId);
+                    var otherValue = otherObj.val();
+                    if ((otherValue || '').length == 0) {
+                        otherObj.focus();
+                    } else {
+                        onSetScorePreditor(matchId);
+                    }
+                }
+            }
+
+    function onChooseStar_Check(matchId) {
+        if ($('#ckIsChooseStar_' + matchId).hasClass('disabled') == true) return;
+                var t = $('#ckIsChooseStar_' + matchId).hasClass('checked') == true ? 3 : 1;
+                    onHope(matchId, t);
+                }
+
+                function onHope(matchId, type) {
+                    var res = true;
+                    if (type == 1) res = confirm("Xác nhận đặt ngôi sao hy vọng! ");
+                    if (res == false) $('#ckIsChooseStar_' + matchId).removeClass('checked');
+                    else {
+            $.ajax({
+                        type: "POST",
+                url: '@Url.Action("Hope", "Prediction")',
+                dataType: "json",
+                data: { matchId: matchId, type: type },
+                success: function (res) {
+                    if (res.code == 0) {
+                        $('#ckIsChooseStar_' + matchId).removeClass('checked');
+                        if (res.msg) alert(res.msg);
+                    } else {
+                        if (type == 1) $('#ckIsChooseStar_' + matchId).addClass('checked');
+                        else $('#ckIsChooseStar_' + matchId).removeClass('checked');
+                    }
+                                window.location.reload(true);
+                            },
+                error: errorFunc
+            });
+                    }
+                }
+</script>

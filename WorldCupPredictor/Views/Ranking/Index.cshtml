@@ -1,0 +1,141 @@
+﻿@{
+    ViewBag.Title = "Bảng xếp hạng";}
+<style>
+    .table-center tr th, .table-center tr td {
+        vertical-align: middle !important;
+    }
+    .text-color-up {
+        color: #0bdf39;
+        font-size:11px;
+    }
+    .text-color-down {
+        color: #ff0017;
+        font-size: 11px;
+    }
+    .gold{
+        color:gold;
+        font-size:16px;
+    }
+    .silver {
+        color: silver;
+        font-size: 16px;
+    }
+    .medal {
+        color: #D98719;
+        font-size: 16px;
+    }
+    .bold{
+        font-weight:600;
+    }
+</style>
+<br />
+<br />
+<table height=100% width=100%>
+    <tr>
+        <td align=center>
+            <div class="panel panel-success table-container table-center">
+                <div class="panel-heading" style="font-size: 25px; text-align: center">Bảng xếp hạng</div>
+                @if (ViewBag.MyRank != null)
+                {
+                <div class="panel-body">
+                    <b>@ViewBag.MyRank.FullName</b>:
+                    <span class="label label-success">Thứ hạng: @ViewBag.MyRank.RankUser</span>
+                    <span class="label label-success">Tổng điểm: @ViewBag.MyRank.TotalPoint</span><br />
+                    @if (ViewBag.MyRank.RankUser > 24 && ViewBag.MyRank.TotalPoint != 0)
+                    {
+                        if (ViewBag.MyRank.PointNeedToRank24 > 0)
+                        {<span>Đang kém top có giải thưởng: <strong>@ViewBag.MyRank.PointNeedToRank24</strong> điểm</span><br />}
+                        if (ViewBag.MyRank.PointNeedToRank1 > 0)
+                        {<span>Đang kém người dẫn đầu: <strong>@ViewBag.MyRank.PointNeedToRank1</strong> điểm</span> }
+                    }
+                    else if (ViewBag.MyRank.RankUser > 3 && ViewBag.MyRank.TotalPoint != 0 && ViewBag.MyRank.PointNeedToRank1 > 0)
+                    {
+                        <span>Đang kém người dẫn đầu: <strong>@ViewBag.MyRank.PointNeedToRank1</strong> điểm</span>
+                    }
+                </div>
+                }
+                @*<div class="panel-body">
+                    <span class="label label-success">Thắng: @ViewBag.Win (@ViewBag.WinPercent%)</span>
+                    <span class="label label-warning">Hòa: @ViewBag.Draw (@ViewBag.DrawPercent%)</span>
+                    <span class="label label-danger">Thua: @ViewBag.Loose (@ViewBag.LoosePercent%)</span>
+                    <span class="label label-info">Không dự đoán: @ViewBag.NotPredict</span>
+                </div>*@
+                @{ int rowNum = 0;}
+                <div class="table-container">
+                    <table class="table table-bordered table-hover table-striped">
+                        <tr>
+                            <th class="m-hide">#</th>
+                            <th style="text-align: center">Tên</th>
+                            <th style="text-align: center">Điểm</th>
+                            <th style="text-align: center">Xếp hạng</th>
+                            <th style="text-align: center">Thắng</th>
+                            <th style="text-align: center">Đúng tỉ số</th>
+                            <th style="text-align: center">Số trận</th>
+                            <th style="text-align: center">Thời gian dự đoán cuối cùng</th>
+                        </tr>
+                        @foreach (var item in Model)
+                        {
+                            rowNum = rowNum + 1;
+                            var bold = item.RankUser < 24 ? " bold" : "";
+                            var style = item.RankUser < 4? "glyphicon glyphicon-tower" : item.RankUser < 24? "glyphicon glyphicon-star-empty" : "";
+                            switch ((int)item.RankUser)
+                            {
+                                case 1:
+                                    style += " gold";
+                                    break;
+                                case 2:
+                                    style += " silver";
+                                    break;
+                                case 3:
+                                    style += " medal";
+                                    break;
+                            }
+
+                            string success = HttpContext.Current.User.Identity.Name == item.UserName ? "label label-primary" : "";
+                    <tr>
+                        <td class="m-hide">@rowNum</td>
+                        <td>
+                            <span class="@style"></span>
+                            <a href="@Url.Action("User", "Prediction", new {userName = @item.UserName})"><span class="@success @bold">@item.FullName <i>(@item.Company.ToUpper())</i></span></a>
+                        </td>
+
+                        <td style="text-align: center">
+                            <span class="lb-link">@item.TotalPoint</span>
+                        </td>
+
+                        <td style="text-align: right;width:102px;">
+
+                            @if (@item.DiffRank > 0)
+                            {
+                                <span class="text-color-up">
+                                    (<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" class="inline" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>@item.DiffRank)
+                                </span> }
+                            else if (@item.DiffRank < 0)
+                            {
+                                <span class="text-color-down">
+                                    (<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" class="inline" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>@item.DiffRank)
+                                </span>}
+                            <strong class="lb-link">@item.RankUser</strong>
+                        </td>
+
+                        <td style="text-align:center">
+                            <span>@item.TotalWin</span>
+                        </td>
+                        <td style="text-align:center">
+                            <span>@item.TotalWinScore</span>
+                        </td>
+                        <td style="text-align:center">
+                            <span>@item.TotalPredict</span>
+                        </td>
+                        <td style="text-align:center">
+                            <span>@item.LastPredictTime.ToString("dd/MM HH:mm")</span>
+                        </td>
+                    </tr>
+}
+                    </table>
+                </div>
+            </div>
+            <div class="fb-comments" data-href="https://eu24.gemadept.com.vn/Ranking" data-order-by="reverse_time" data-width="600" data-numposts="5"></div>
+        </td>
+    </tr>
+</table>
