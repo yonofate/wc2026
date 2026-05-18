@@ -211,6 +211,8 @@
                     <li class="@isActive("Home", "Index")">@Html.ActionLink("THỂ LỆ", "Index", "Home")</li>
                     <li class="@isActive("Prediction", "Index")">@Html.ActionLink("DỰ ĐOÁN", "Index", "Prediction", new { filter = true }, null)</li>
                     <li class="@isActive("Prediction", "User")">@Html.ActionLink("KẾT QUẢ DỰ ĐOÁN", "User", "Prediction")</li>
+                    <li class="@isActive("Wc2026Prediction", "Index")">@Html.ActionLink("WC26 DỰ ĐOÁN", "Index", "Wc2026Prediction", new { filter = true }, null)</li>
+                    <li class="@isActive("Wc2026Prediction", "Results")">@Html.ActionLink("WC26 KẾT QUẢ", "Results", "Wc2026Prediction")</li>
                     <li class="@isActive("Ranking", "Index")">@Html.ActionLink("BẢNG XẾP HẠNG", "Index", "Ranking")</li>
                     @if (ViewBag.AllowBetMoney == true)
                     {

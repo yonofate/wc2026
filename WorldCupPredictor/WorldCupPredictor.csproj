@@ -208,14 +208,18 @@
     <Compile Include="Controllers\GroupTableController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PredictionController.cs" />
+    <Compile Include="Controllers\Wc2026PredictionController.cs" />
     <Compile Include="Controllers\RankingController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infracstructures\EmailHelper.cs" />
     <Compile Include="Infracstructures\SqlHelper.cs" />
+    <Compile Include="Services\Wc2026MatchCatalog.cs" />
+    <Compile Include="Services\Wc2026PredictionRepository.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\GroupTableModel.cs" />
+    <Compile Include="Models\Wc2026Models.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -323,6 +327,10 @@
     <Content Include="Scripts\toastr.min.js.map" />
     <Content Include="Views\Prediction\Detail.cshtml" />
     <Content Include="Views\Prediction\User.cshtml" />
+    <Content Include="Views\Wc2026Prediction\Detail.cshtml" />
+    <Content Include="Views\Wc2026Prediction\Index.cshtml" />
+    <Content Include="Views\Wc2026Prediction\User.cshtml" />
+    <Content Include="Database\Wc2026_UserPrediction.sql" />
     <Content Include="Views\Ranking\Sponsor.cshtml" />
     <Content Include="Views\Account\ManageResetPassword.cshtml" />
     <Content Include="Views\GroupTable\ManageMatch.cshtml" />

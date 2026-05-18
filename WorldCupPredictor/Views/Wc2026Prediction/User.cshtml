@@ -1,0 +1,70 @@
+@model WorldCupPredictor.Models.Wc2026UserSummaryVm
+@{
+    ViewBag.Title = "Kết quả dự đoán WC 2026 — " + Model.UserName;
+}
+
+<br />
+<div class="panel panel-success table-container">
+    <div class="panel-heading" style="font-size: 22px">Kết quả dự đoán WC 2026 — <span class="label label-primary">@Model.UserName</span></div>
+    <div class="panel-body">
+        <span class="label label-success">Thắng: @Model.Win (@Model.WinPercent%)</span>
+        <span class="label label-warning">Hòa: @Model.Draw (@Model.DrawPercent%)</span>
+        <span class="label label-danger">Thua: @Model.Loose (@Model.LoosePercent%)</span>
+        <span class="label label-info">Không chọn đội: @Model.NotPredict</span>
+    </div>
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th>#</th>
+            <th style="text-align:left">Trận</th>
+            <th>Tỷ số</th>
+            <th>Kết quả</th>
+        </tr>
+        @foreach (var item in Model.Rows)
+        {
+            var homeWin = item.HomeWin ? "label label-primary" : "";
+            var awayWin = item.AwayWin ? "label label-primary" : "";
+            <tr>
+                <td>@item.No</td>
+                <td style="text-align:left">
+                    <a href="@Url.Action("Detail", "Wc2026Prediction", new { id = item.MatchId })">
+                        <span class="@homeWin">@item.HomeName</span> vs <span class="@awayWin">@item.AwayName</span>
+                    </a>
+                    @if (item.HomeGoalPre.HasValue && item.AwayGoalPre.HasValue && !item.IsExpire)
+                    {
+                        <span class="label label-warning" style="color:#fff;font-weight:400">[@item.HomeGoalPre-@item.AwayGoalPre]</span>
+                    }
+                </td>
+                <td>
+                    @if (!item.IsExpire)
+                    {
+                        <span>-</span>
+                    }
+                    else
+                    {
+                        <span style="color:#527ef6;">@(item.HomeGoal ?? 0)-@(item.AwayGoal ?? 0)</span>
+                        @if (item.HomeGoalPre.HasValue && item.AwayGoalPre.HasValue)
+                        {
+                            var cls = item.IsWinScore ? "label label-success" : "label label-danger";
+                            <br /><span class="@cls" style="color:#fff;font-weight:400;white-space:nowrap;">[@item.HomeGoalPre-@item.AwayGoalPre]</span>
+                        }
+                    }
+                </td>
+                <td>
+                    @{
+                        var kq = item.IsWin ? "Thắng" : item.IsDraw ? "Hòa" : item.IsLoose ? "Thua" : "";
+                        var cl = item.IsWin ? "success" : item.IsDraw ? "warning" : item.IsLoose ? "danger" : "";
+                    }
+                    @if (item.IsExpire)
+                    {
+                        <span class="label label-@cl">@kq</span>
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+    <p style="text-align:center">@Html.ActionLink("← Dự đoán WC 2026", "Index", "Wc2026Prediction", new { filter = true }, null)</p>
+</div>

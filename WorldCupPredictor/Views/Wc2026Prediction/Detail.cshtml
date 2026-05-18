@@ -1,0 +1,120 @@
+@model WorldCupPredictor.Models.Wc2026DetailVm
+@{
+    ViewBag.Title = "Chi tiết WC 2026";
+    var m = Model.Match;
+    var disabled = m.IsPredictionClosed ? "disabled" : "";
+    var readol = m.IsPredictionClosed ? "readonly" : "";
+    var homeWin = m.UserHomeWin ? "btn-primary" : "";
+    var awayWin = m.UserAwayWin ? "btn-primary" : "";
+    var isBeted = m.UserHomeWin || m.UserAwayWin;
+    var homeScore = m.IsFinished && m.HomeScore.HasValue ? m.HomeScore.ToString() : "-";
+    var awayScore = m.IsFinished && m.AwayScore.HasValue ? m.AwayScore.ToString() : "-";
+}
+
+<style>
+    .ipu-num { width: 40px; height: 40px; font-size: 18px; text-align: center; font-weight: bold; }
+    .logo-team { max-width: 64px; max-height: 48px; }
+    .btn-input-bet { width: 90%; max-width: 280px; }
+</style>
+
+@if (!string.IsNullOrEmpty(ViewBag.ApiError as string))
+{
+    <div class="alert alert-warning">@ViewBag.ApiError</div>
+}
+
+<br />
+<div class="panel panel-success table-container">
+    <div class="panel-heading" style="font-size: 22px; text-align: center">Chi tiết trận (API)</div>
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th style="width:38%">
+                @if (!string.IsNullOrEmpty(m.HomeCrestUrl)) { <img class="logo-team" src="@m.HomeCrestUrl" alt="" /> }
+                @m.HomeName
+            </th>
+            <th style="width:24%; text-align:center">vs</th>
+            <th style="width:38%">
+                @m.AwayName
+                @if (!string.IsNullOrEmpty(m.AwayCrestUrl)) { <img class="logo-team" src="@m.AwayCrestUrl" alt="" /> }
+            </th>
+        </tr>
+        <tr>
+            <td style="text-align:center;font-size:18px;font-weight:bold">@homeScore</td>
+            <td style="text-align:center">Tỷ số (90'+)</td>
+            <td style="text-align:center;font-size:18px;font-weight:bold">@awayScore</td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align:center">@m.KickoffUtc.ToString("dd/MM/yyyy HH:mm") UTC — <span class="label label-default">@m.Status</span></td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align:center">
+                <small>Tổng @Model.TotalPickCount lượt chọn đội — Nhà: @ViewBag.HomePct% · Khách: @ViewBag.AwayPct%</small>
+            </td>
+        </tr>
+        @if (m.IsPredictionClosed)
+        {
+            <tr><td colspan="3" style="text-align:center;color:#c00;font-weight:bold">Đã khóa dự đoán (trận đã / đang diễn ra theo cấu hình).</td></tr>
+        }
+        <tr>
+            <td style="text-align:center">
+                <input type="button" class="btn btn-default btn-sm btn-input-bet @homeWin @disabled" value="Theo @m.HomeName" onclick="wcPredictHome('@m.Id')" />
+            </td>
+            <td></td>
+            <td style="text-align:center">
+                <input type="button" class="btn btn-default btn-sm btn-input-bet @awayWin @disabled" value="Theo @m.AwayName" onclick="wcPredictAway('@m.Id')" />
+            </td>
+        </tr>
+        @if (isBeted)
+        {
+            <tr>
+                <td colspan="3" style="text-align:center">
+                    <strong>@m.HomeName</strong>
+                    <input @readol type="tel" placeholder="+" id="homeGoalPre" class="ipu-num @disabled" maxlength="1" value="@(m.UserHomeGoalPre?.ToString() ?? "")" inputmode="numeric" oninput="wcDChange('@m.Id',this,'home')" onfocus="wcClearPh(this)" onblur="wcRestorePh(this)" />
+                    —
+                    <input @readol type="tel" placeholder="+" id="awayGoalPre" class="ipu-num @disabled" maxlength="1" value="@(m.UserAwayGoalPre?.ToString() ?? "")" inputmode="numeric" oninput="wcDChange('@m.Id',this,'away')" onfocus="wcClearPh(this)" onblur="wcRestorePh(this)" />
+                    <strong>@m.AwayName</strong>
+                </td>
+            </tr>
+        }
+    </table>
+    <p style="text-align:center">@Html.ActionLink("← Về danh sách WC 2026", "Index", "Wc2026Prediction", new { filter = true }, null)</p>
+</div>
+
+<script type="text/javascript">
+    function wcPredictHome(id) { wcPredict(id, 1); }
+    function wcPredictAway(id) { wcPredict(id, 2); }
+    function wcPredict(matchId, type) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Predict", "Wc2026Prediction")',
+            dataType: "json",
+            data: { matchId: matchId, type: type },
+            success: function (data) { if (data === 1) window.location.reload(true); else alert('Không thể dự đoán.'); },
+            error: function () { alert('Lỗi kết nối.'); }
+        });
+    }
+    function wcClearPh(input) { input.placeholder = ''; }
+    function wcRestorePh(input) { if (input.value === '') input.placeholder = '+'; }
+    function wcDSet(matchId) {
+        var h = $('#homeGoalPre').val(), a = $('#awayGoalPre').val();
+        if (h === "" || a === "") { alert('Nhập tỉ số'); return; }
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SetScore", "Wc2026Prediction")',
+            dataType: "json",
+            data: { matchId: matchId, homeGoal: h, awayGoal: a },
+            success: function (data) {
+                if (data === 1) toastr.success('Đã lưu tỉ số');
+                else if (data === 2) alert('Tỉ số không khớp đội đã chọn / không hòa.');
+                else toastr.error('Không lưu được.');
+            },
+            error: function () { alert('Lỗi'); }
+        });
+    }
+    function wcDChange(matchId, cur, from) {
+        cur.value = cur.value.replace(/[^0-9]/g, '').slice(0, 1);
+        if (cur.value.length === 1) {
+            var o = from === 'home' ? $('#awayGoalPre') : $('#homeGoalPre');
+            if ((o.val() || '').length === 0) o.focus(); else wcDSet(matchId);
+        }
+    }
+</script>

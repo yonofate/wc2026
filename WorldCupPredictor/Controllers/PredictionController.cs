@@ -149,7 +149,7 @@ namespace WorldCupPredictor.Controllers
             return View(predictDetailModel);
         }
 
-        public async Task<ActionResult> User(string userName)
+        public new async Task<ActionResult> User(string userName)
         {
             var isMe = (System.Web.HttpContext.Current.User.Identity.Name == userName || string.IsNullOrEmpty(userName) == true);
             if (string.IsNullOrEmpty(userName)) userName = System.Web.HttpContext.Current.User.Identity.Name;
@@ -228,8 +228,10 @@ namespace WorldCupPredictor.Controllers
                         string types = $"{homeGoal}-{awayGoal}";
                         Log.Information($"{userName} set score: matchId [{matchId}] - [{types}]");
                     }
-                }catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
+                    Log.Error(ex, "SetScorePreditor failed for match {MatchId}", matchId);
                     return Json(0);
                 }
             }

@@ -1,0 +1,172 @@
+@model List<WorldCupPredictor.Models.Wc2026DayGroup>
+@{
+    ViewBag.Title = "Dự đoán WC 2026";
+}
+
+<style>
+    .ipu-num { width: 46px; height: 46px; font-size: 22px; text-align: center; font-weight: bold; }
+    .pre-board { width: 100%; margin: 0 auto; }
+    .pre-board.beted { background-color: #eef8f8; }
+    .btn-input-bet { width: 152px; font-size: 16px; }
+    .f-16 { font-size: 18px; }
+    .f-35 { width: 35%; }
+    .f-14 { width: 14%; }
+    .team-logo { max-width: 60px; max-height: 44px; }
+    @@media screen and (max-width: 600px) {
+        .btn-input-bet { width: 125px; font-size: 13px; }
+        .ipu-num { width: 36px; height: 36px; font-size: 18px; }
+        .f-35 { width: 39%; }
+        .f-14 { width: 11%; }
+    }
+</style>
+
+@if (!string.IsNullOrEmpty(ViewBag.ApiError as string))
+{
+    <div class="alert alert-warning">@ViewBag.ApiError</div>
+}
+@if (!string.IsNullOrEmpty(ViewBag.DbError as string))
+{
+    <div class="alert alert-danger">@ViewBag.DbError</div>
+}
+
+<table height="100%" width="100%">
+    <tr>
+        <td align="center" valign="middle">
+            <p style="margin:10px auto">
+                @if (ViewBag.Filter == null)
+                {
+                    @Html.ActionLink(">>> Trận sắp tới <<<", "Index", "Wc2026Prediction", new { filter = true }, null)
+                }
+                else
+                {
+                    @Html.ActionLink(">>> Tất cả các trận <<<", "Index", "Wc2026Prediction")
+                }
+            </p>
+            <p class="text-muted" style="max-width:640px;margin:0 auto 12px;">
+                Lịch &amp; tỉ số trận được làm mới từ API (cache vài phút). Dự đoán của bạn lưu trong SQL.
+            </p>
+
+            @foreach (var group in Model)
+            {
+                var idx = 0;
+                var tt = group.Matches.Count;
+                <div class="panel panel-success table-container">
+                    <div class="panel-heading" style="font-size: 22px; font-weight: bold">Ngày @group.Date.ToString("dd/MM/yyyy") (UTC)</div>
+                    @foreach (var item in group.Matches)
+                    {
+                        idx++;
+                        var disabled = item.IsPredictionClosed ? "disabled" : "";
+                        var homeWin = item.UserHomeWin ? "btn-primary" : "";
+                        var awayWin = item.UserAwayWin ? "btn-primary" : "";
+                        var isBeted = item.UserHomeWin || item.UserAwayWin;
+                        var isBetedActive = isBeted ? "beted" : "";
+                        var isBetedView = isBeted ? "" : "hidden";
+                        var isNotBetedView = isBeted ? "hidden" : "";
+                        var homeScore = item.IsFinished && item.HomeScore.HasValue ? item.HomeScore.ToString() : "";
+                        var awayScore = item.IsFinished && item.AwayScore.HasValue ? item.AwayScore.ToString() : "";
+                        var readol = "";
+
+                        <table class="pre-board @isBetedActive">
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 5px;">
+                                    <strong>@(item.StageLabel ?? "WC 2026")</strong>
+                                    <span> — @item.KickoffUtc.ToString("dd/MM HH:mm") UTC</span>
+                                    <span class="label label-default" style="margin-left:6px;">@item.Status</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:left;" class="f-35">
+                                    @if (!string.IsNullOrEmpty(item.HomeCrestUrl))
+                                    {
+                                        <img class="team-logo" src="@item.HomeCrestUrl" alt="" />
+                                    }
+                                    <span class="f-16">&nbsp;@item.HomeName</span>
+                                </td>
+                                @if (item.IsFinished)
+                                {
+                                    <td style="font-size: 17px; font-weight: bold; text-align: center; width: 70px">@homeScore</td>
+                                    <td style="text-align:center;"><span>vs</span><br /></td>
+                                    <td style="font-size: 17px; font-weight: bold; text-align: center; width: 70px">@awayScore</td>
+                                }
+                                else
+                                {
+                                    <td style="text-align: right;" class="f-14 @isBetedView">
+                                        <input @readol type="tel" placeholder="+" pattern="[0-9]" id="homeGoalPre_@item.Id" class="ipu-num @disabled" maxlength="1" value="@(item.UserHomeGoalPre?.ToString() ?? "")" inputmode="numeric" oninput="wcChangeScore('@item.Id',this,'home')" onfocus="wcClearPh(this)" onblur="wcRestorePh(this)" />
+                                    </td>
+                                    <td style="text-align: center;"><span class="@isNotBetedView">vs</span></td>
+                                    <td style="text-align: left;" class="f-14 @isBetedView">
+                                        <input @readol type="tel" placeholder="+" pattern="[0-9]" id="awayGoalPre_@item.Id" class="ipu-num @disabled" maxlength="1" value="@(item.UserAwayGoalPre?.ToString() ?? "")" inputmode="numeric" oninput="wcChangeScore('@item.Id',this,'away')" onfocus="wcClearPh(this)" onblur="wcRestorePh(this)" />
+                                    </td>
+                                }
+                                <td style="text-align: right;" class="f-35">
+                                    <span class="f-16">@item.AwayName&nbsp;</span>
+                                    @if (!string.IsNullOrEmpty(item.AwayCrestUrl))
+                                    {
+                                        <img class="team-logo" src="@item.AwayCrestUrl" alt="" />
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" style="text-align:center;padding-top:5px;padding-bottom:5px;">
+                                    <input style="margin-left:5px;float:left;" type="button" class="btn-input-bet btn btn-default btn-sm @homeWin @disabled" value="Theo @item.HomeName" onclick="wcPredictHome('@item.Id')" />
+                                    <input style="margin-right:5px;float:right;" type="button" class="btn-input-bet btn btn-default btn-sm @awayWin @disabled" value="Theo @item.AwayName" onclick="wcPredictAway('@item.Id')" />
+                                    <a style="clear:both;display:inline-block;margin-top:8px;" href="@Url.Action("Detail", "Wc2026Prediction", new { id = item.Id })">Chi tiết &amp; tỉ lệ chọn</a>
+                                </td>
+                            </tr>
+                            @if (idx < tt)
+                            {
+                                <tr><td colspan="5"></td></tr>
+                            }
+                        </table>
+                    }
+                </div>
+            }
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+    function wcPredictHome(id) { wcPredict(id, 1); }
+    function wcPredictAway(id) { wcPredict(id, 2); }
+    function wcPredict(matchId, type) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Predict", "Wc2026Prediction")',
+            dataType: "json",
+            data: { matchId: matchId, type: type },
+            success: function (data) {
+                if (data === 1) window.location.reload(true);
+                else alert('Không thể dự đoán (đã khóa hoặc trận không tồn tại).');
+            },
+            error: function () { alert('Lỗi kết nối.'); }
+        });
+    }
+    function wcClearPh(input) { input.placeholder = ''; }
+    function wcRestorePh(input) { if (input.value === '') input.placeholder = '+'; }
+    function wcSetScore(matchId) {
+        var homeGoal = $('#homeGoalPre_' + matchId).val();
+        var awayGoal = $('#awayGoalPre_' + matchId).val();
+        if (homeGoal === "" || awayGoal === "") { alert("Nhập tỉ số hai đội."); return; }
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SetScore", "Wc2026Prediction")',
+            dataType: "json",
+            data: { matchId: matchId, homeGoal: homeGoal, awayGoal: awayGoal },
+            success: function (data) {
+                if (data === 1) { toastr.success("Đã lưu tỉ số dự đoán."); }
+                else if (data === 2) { alert('Tỉ số không khớp với đội bạn chọn (không cho hòa khi đã chọn đội thắng).'); }
+                else { toastr.error("Không lưu được."); }
+            },
+            error: function () { alert('Lỗi kết nối.'); }
+        });
+    }
+    function wcChangeScore(matchId, current, from) {
+        current.value = current.value.replace(/[^0-9]/g, '').slice(0, 1);
+        if (current.value.length === 1) {
+            var otherObj = from === 'home' ? $('#awayGoalPre_' + matchId) : $('#homeGoalPre_' + matchId);
+            var otherValue = otherObj.val();
+            if ((otherValue || '').length === 0) otherObj.focus();
+            else wcSetScore(matchId);
+        }
+    }
+</script>
