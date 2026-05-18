@@ -8,7 +8,7 @@
 
 <p class="text-success">@ViewBag.StatusMessage</p>
 
-@if (HttpContext.Current.User.Identity.Name == "05491" || HttpContext.Current.User.Identity.Name == "00067")
+@if (HttpContext.Current.User.Identity.Name == "05491" || HttpContext.Current.User.Identity.Name == "00067" || HttpContext.Current.User.Identity.Name == "05410")
 {
 <div>
     @Html.ActionLink("Manage next matchs", "ManageMatch", "GroupTable", new { }, new { }) | 
