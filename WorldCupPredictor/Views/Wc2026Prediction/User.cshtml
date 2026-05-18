@@ -4,6 +4,14 @@
 }
 
 <br />
+@if (!string.IsNullOrEmpty(ViewBag.ApiError as string))
+{
+    <div class="alert alert-warning">@ViewBag.ApiError</div>
+}
+@if (!string.IsNullOrEmpty(ViewBag.DbError as string))
+{
+    <div class="alert alert-danger">@ViewBag.DbError</div>
+}
 <div class="panel panel-success table-container">
     <div class="panel-heading" style="font-size: 22px">Kết quả dự đoán WC 2026 — <span class="label label-primary">@Model.UserName</span></div>
     <div class="panel-body">

@@ -33,13 +33,8 @@ namespace WorldCupPredictor
         protected void Application_Error(object sender, EventArgs e)
         {
             var exception = Server.GetLastError();
-            Log.Error(exception, "Unhandled exception occurred.");
-            // Log the exception (e.g., using a logging framework like log4net or NLog)
-            // Clear the error from the server
-            Server.ClearError();
-
-            // Redirect to a custom error page
-            //Response.Redirect("~/Error/General");
+            if (exception != null)
+                Log.Error(exception, "Unhandled exception occurred.");
         }
     }
 }

@@ -21,6 +21,10 @@
 {
     <div class="alert alert-warning">@ViewBag.ApiError</div>
 }
+@if (!string.IsNullOrEmpty(ViewBag.DbError as string))
+{
+    <div class="alert alert-danger">@ViewBag.DbError</div>
+}
 
 <br />
 <div class="panel panel-success table-container">

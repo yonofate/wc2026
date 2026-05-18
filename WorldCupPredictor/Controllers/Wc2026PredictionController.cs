@@ -31,14 +31,16 @@ namespace WorldCupPredictor.Controllers
         public async Task<ActionResult> Index(bool? filter = null)
         {
             ViewBag.Filter = filter;
-            var (matches, err) = await Wc2026MatchCatalog.GetMatchesAsync().ConfigureAwait(false);
-            ViewBag.ApiError = err;
+            var userName = User.Identity.Name;
 
-            var userName = System.Web.HttpContext.Current.User.Identity.Name;
+            var catalog = await Wc2026MatchCatalog.GetMatchesAsync();
+            var matches = catalog.Matches;
+            ViewBag.ApiError = catalog.ErrorMessage;
+
             IReadOnlyList<Wc2026StoredPrediction> preds = Array.Empty<Wc2026StoredPrediction>();
             try
             {
-                preds = await _repo.GetByUserAsync(userName).ConfigureAwait(false);
+                preds = await _repo.GetByUserAsync(userName);
             }
             catch (Exception ex)
             {
@@ -60,15 +62,23 @@ namespace WorldCupPredictor.Controllers
         [HttpPost]
         public async Task<ActionResult> Predict(string matchId, int type)
         {
-            var (matches, _) = await Wc2026MatchCatalog.GetMatchesAsync().ConfigureAwait(false);
-            var m = matches.FirstOrDefault(x => string.Equals(x.Id, matchId, StringComparison.OrdinalIgnoreCase));
+            var catalog = await Wc2026MatchCatalog.GetMatchesAsync();
+            var m = catalog.Matches.FirstOrDefault(x => string.Equals(x.Id, matchId, StringComparison.OrdinalIgnoreCase));
             if (m == null || m.IsPredictionClosed)
                 return Json(0);
 
-            var userName = System.Web.HttpContext.Current.User.Identity.Name;
+            var userName = User.Identity.Name;
             var home = type == 1;
             var away = type == 2;
-            await _repo.UpsertPickAsync(matchId, userName, home, away).ConfigureAwait(false);
+            try
+            {
+                await _repo.UpsertPickAsync(matchId, userName, home, away);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "WC2026 Predict failed");
+                return Json(0);
+            }
             Log.Information("{User} wc2026 predict match {Match} type {Type}", userName, matchId, type);
             return Json(1);
         }
@@ -76,16 +86,26 @@ namespace WorldCupPredictor.Controllers
         [HttpPost]
         public async Task<ActionResult> SetScore(string matchId, int homeGoal, int awayGoal)
         {
-            var (matches, _) = await Wc2026MatchCatalog.GetMatchesAsync().ConfigureAwait(false);
-            var m = matches.FirstOrDefault(x => string.Equals(x.Id, matchId, StringComparison.OrdinalIgnoreCase));
+            var catalog = await Wc2026MatchCatalog.GetMatchesAsync();
+            var m = catalog.Matches.FirstOrDefault(x => string.Equals(x.Id, matchId, StringComparison.OrdinalIgnoreCase));
             if (m == null || m.IsPredictionClosed)
                 return Json(0);
 
             if (homeGoal < 0 || homeGoal > 9 || awayGoal < 0 || awayGoal > 9)
                 return Json(0);
 
-            var userName = System.Web.HttpContext.Current.User.Identity.Name;
-            var row = await _repo.GetAsync(matchId, userName).ConfigureAwait(false);
+            var userName = User.Identity.Name;
+            Wc2026StoredPrediction row;
+            try
+            {
+                row = await _repo.GetAsync(matchId, userName);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "WC2026 SetScore read failed");
+                return Json(0);
+            }
+
             if (row == null || (!row.HomeWin && !row.AwayWin))
                 return Json(0);
 
@@ -99,24 +119,42 @@ namespace WorldCupPredictor.Controllers
             if (homeGoal == awayGoal)
                 return Json(2);
 
-            await _repo.UpsertScoreAsync(matchId, userName, homeGoal, awayGoal).ConfigureAwait(false);
+            try
+            {
+                await _repo.UpsertScoreAsync(matchId, userName, homeGoal, awayGoal);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "WC2026 SetScore save failed");
+                return Json(0);
+            }
             Log.Information("{User} wc2026 score match {Match} {H}-{A}", userName, matchId, homeGoal, awayGoal);
             return Json(1);
         }
 
         public async Task<ActionResult> Detail(string id)
         {
-            var (matches, err) = await Wc2026MatchCatalog.GetMatchesAsync().ConfigureAwait(false);
-            ViewBag.ApiError = err;
-            var m = matches.FirstOrDefault(x => string.Equals(x.Id, id, StringComparison.OrdinalIgnoreCase));
+            var catalog = await Wc2026MatchCatalog.GetMatchesAsync();
+            ViewBag.ApiError = catalog.ErrorMessage;
+            var m = catalog.Matches.FirstOrDefault(x => string.Equals(x.Id, id, StringComparison.OrdinalIgnoreCase));
             if (m == null)
                 return HttpNotFound();
 
-            var userName = System.Web.HttpContext.Current.User.Identity.Name;
-            var preds = await _repo.GetByUserAsync(userName).ConfigureAwait(false);
+            var userName = User.Identity.Name;
+            IReadOnlyList<Wc2026StoredPrediction> preds = Array.Empty<Wc2026StoredPrediction>();
+            IReadOnlyList<Wc2026StoredPrediction> all = Array.Empty<Wc2026StoredPrediction>();
+            try
+            {
+                preds = await _repo.GetByUserAsync(userName);
+                all = await _repo.GetByMatchAsync(id);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.DbError = "Không đọc được bảng dự đoán WC2026 (đã chạy script SQL?): " + ex.Message;
+            }
+
             AttachUserPicks(new[] { m }, preds);
 
-            var all = await _repo.GetByMatchAsync(id).ConfigureAwait(false);
             var homeC = all.Count(x => x.HomeWin);
             var awayC = all.Count(x => x.AwayWin);
             var total = homeC + awayC;
@@ -135,14 +173,25 @@ namespace WorldCupPredictor.Controllers
 
         public async Task<ActionResult> Results(string userName)
         {
-            var isMe = System.Web.HttpContext.Current.User.Identity.Name == userName || string.IsNullOrEmpty(userName);
+            var isMe = User.Identity.Name == userName || string.IsNullOrEmpty(userName);
             if (string.IsNullOrEmpty(userName))
-                userName = System.Web.HttpContext.Current.User.Identity.Name;
+                userName = User.Identity.Name;
 
-            var (matches, _) = await Wc2026MatchCatalog.GetMatchesAsync().ConfigureAwait(false);
-            var matchMap = matches.ToDictionary(x => x.Id, StringComparer.OrdinalIgnoreCase);
+            var catalog = await Wc2026MatchCatalog.GetMatchesAsync();
+            ViewBag.ApiError = catalog.ErrorMessage;
+            var matchMap = catalog.Matches
+                .GroupBy(x => x.Id, StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
 
-            var preds = (await _repo.GetByUserAsync(userName).ConfigureAwait(false)).ToList();
+            var preds = new List<Wc2026StoredPrediction>();
+            try
+            {
+                preds = (await _repo.GetByUserAsync(userName)).ToList();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.DbError = "Không đọc được bảng dự đoán WC2026 (đã chạy script SQL?): " + ex.Message;
+            }
             var rows = new List<Wc2026UserRowVm>();
             var no = 1;
             foreach (var p in preds.OrderBy(x =>
