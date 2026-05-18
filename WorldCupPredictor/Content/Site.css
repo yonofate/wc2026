@@ -1,5 +1,5 @@
 ﻿body {
-    padding-top: 50px;
+    padding-top: 56px;
     padding-bottom: 20px;
     /*background-image: url('/Content/images/main-bg.jpg');
     background-repeat: repeat;
@@ -11,6 +11,36 @@
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    padding-top: 12px;
+}
+
+/* Navbar cố định — chừa đủ chiều cao khi menu nhiều mục (WC26, …) */
+@media (min-width: 768px) {
+    body {
+        padding-top: 64px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1399px) {
+    body {
+        padding-top: 100px;
+    }
+
+    .navbar-nav > li > a {
+        font-size: 12px;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body {
+        padding-top: 52px;
+    }
+
+    .body-content {
+        padding-top: 8px;
+    }
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
@@ -48,6 +78,9 @@ input[type="checkbox"].input-validation-error {
 .nav-blue {
     background-color: #0f4583;
     border-color: #0087e6;
+    z-index: 1030;
+    min-height: 50px;
+    margin-bottom: 0;
 }
 
 .navbar-nav > li > a {
