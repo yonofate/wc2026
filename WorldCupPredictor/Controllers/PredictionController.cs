@@ -260,7 +260,7 @@ namespace WorldCupPredictor.Controllers
         [HttpPost]
         public ActionResult SetHandicap(int matchId, float homeHandicap, float awayHandicap)
         {
-           if (HttpContext.User.Identity.Name != "05491" && HttpContext.User.Identity.Name != "00067") return Json(false);
+           if (HttpContext.User.Identity.Name != "05491" && HttpContext.User.Identity.Name != "00067" && HttpContext.User.Identity.Name != "05410") return Json(false);
 
             bool result;
             using (var cnn = SqlHelper.OpenConnection())
