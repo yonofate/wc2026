@@ -239,7 +239,7 @@ namespace WorldCupPredictor.Controllers
         [HttpPost]
         public async Task<ActionResult> SetScrore(int matchId, int homeGoal, int awayGoal)
         {
-           if (HttpContext.User.Identity.Name != "05491" && HttpContext.User.Identity.Name != "00067") return Json(false);
+           if (HttpContext.User.Identity.Name != "05491" && HttpContext.User.Identity.Name != "00067" && HttpContext.User.Identity.Name != "05410") return Json(false);
 
             bool result;
             using (var cnn = SqlHelper.OpenConnection())
