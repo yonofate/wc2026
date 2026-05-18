@@ -1,5 +1,5 @@
 ﻿body {
-    padding-top: 56px;
+    padding-top: 52px;
     padding-bottom: 20px;
     /*background-image: url('/Content/images/main-bg.jpg');
     background-repeat: repeat;
@@ -12,25 +12,6 @@
     padding-left: 15px;
     padding-right: 15px;
     padding-top: 12px;
-}
-
-/* Navbar cố định — chừa đủ chiều cao khi menu nhiều mục (WC26, …) */
-@media (min-width: 768px) {
-    body {
-        padding-top: 64px;
-    }
-}
-
-@media (min-width: 992px) and (max-width: 1399px) {
-    body {
-        padding-top: 100px;
-    }
-
-    .navbar-nav > li > a {
-        font-size: 12px;
-        padding-left: 8px !important;
-        padding-right: 8px !important;
-    }
 }
 
 @media (max-width: 767px) {
@@ -83,6 +64,11 @@ input[type="checkbox"].input-validation-error {
     margin-bottom: 0;
 }
 
+.nav-bar-inner {
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
 .navbar-nav > li > a {
     background-image: url('/Content/images/background.png');
     color: #ffffff !important;
@@ -91,4 +77,101 @@ input[type="checkbox"].input-validation-error {
 
 .navbar-nav > li > a:hover {
     color: #999999 !important;
+}
+
+/* Desktop: full-width navbar, menu + đăng nhập trên một hàng */
+@media (min-width: 768px) {
+    .nav-bar-inner {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+
+    .nav-bar-inner > .navbar-header {
+        flex: 0 0 auto;
+        float: none;
+    }
+
+    .nav-bar-inner > .navbar-collapse {
+        flex: 1 1 auto;
+        float: none;
+        width: auto;
+        display: block !important;
+        height: auto !important;
+        overflow: visible !important;
+        padding: 0;
+        border: 0;
+        box-shadow: none;
+    }
+
+    .nav-bar-inner .nav-row {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        width: 100%;
+    }
+
+    .nav-bar-inner .nav-main {
+        float: none;
+        display: flex;
+        flex-wrap: nowrap;
+        flex: 1 1 auto;
+        margin: 0;
+        min-width: 0;
+    }
+
+    .nav-bar-inner .nav-main > li {
+        float: none;
+        white-space: nowrap;
+    }
+
+    .nav-bar-inner .nav-main > li > a {
+        font-size: 11px;
+        padding: 15px 7px;
+    }
+
+    .nav-bar-inner .nav-auth-form {
+        flex: 0 0 auto;
+        margin: 0 0 0 auto;
+    }
+
+    .nav-bar-inner .nav-row > .nav-auth-links {
+        flex: 0 0 auto;
+        margin-left: auto;
+    }
+
+    .nav-bar-inner .nav-auth-links {
+        float: none;
+        display: flex;
+        flex-wrap: nowrap;
+        margin: 0;
+    }
+
+    .nav-bar-inner .nav-auth-links > li {
+        float: none;
+        white-space: nowrap;
+    }
+
+    .nav-bar-inner .nav-auth-links > li > a {
+        font-size: 11px;
+        padding: 15px 8px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .nav-bar-inner .nav-main > li > a,
+    .nav-bar-inner .nav-auth-links > li > a {
+        font-size: 12px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .nav-bar-inner .nav-main > li > a,
+    .nav-bar-inner .nav-auth-links > li > a {
+        font-size: 10px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
 }

@@ -191,7 +191,7 @@
     
 
     <div class="navbar navbar-inverse nav-blue navbar-fixed-top">
-        <div class="container">
+        <div class="container-fluid nav-bar-inner">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
@@ -207,25 +207,23 @@
                             Func<string, string, string> isActive = (controller, action) =>
                                 controller == currentController && action == currentAction ? "active" : ""; }
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="@isActive("Home", "Index")">@Html.ActionLink("THỂ LỆ", "Index", "Home")</li>
-                    <li class="@isActive("Prediction", "Index")">@Html.ActionLink("DỰ ĐOÁN", "Index", "Prediction", new { filter = true }, null)</li>
-                    <li class="@isActive("Prediction", "User")">@Html.ActionLink("KẾT QUẢ DỰ ĐOÁN", "User", "Prediction")</li>
-                    <li class="@isActive("Wc2026Prediction", "Index")">@Html.ActionLink("WC26 DỰ ĐOÁN", "Index", "Wc2026Prediction", new { filter = true }, null)</li>
-                    <li class="@isActive("Wc2026Prediction", "Results")">@Html.ActionLink("WC26 KẾT QUẢ", "Results", "Wc2026Prediction")</li>
-                    <li class="@isActive("Ranking", "Index")">@Html.ActionLink("BẢNG XẾP HẠNG", "Index", "Ranking")</li>
-                    @if (ViewBag.AllowBetMoney == true)
-                    {
-        <li class="@isActive("Ranking", "Sponsor")">@Html.ActionLink("NHÀ TÀI TRỢ", "Sponsor", "Ranking")</li>
-}
-                    <li class="@isActive("Home", "Comment")">@Html.ActionLink("BÌNH LUẬN", "Comment", "Home")</li>
-                    <li class="@isActive("GroupTable", "Index")">@Html.ActionLink("BẢNG ĐẤU", "Index", "GroupTable")</li>
-                    @*@if (HttpContext.Current.User.Identity.Name == "05491")
-                {
-                    <li>@Html.ActionLink("ĐĂNG KÝ", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-                }*@
-                </ul>
-                @Html.Partial("_LoginPartial")
+                <div class="nav-row">
+                    <ul class="nav navbar-nav nav-main">
+                        <li class="@isActive("Home", "Index")">@Html.ActionLink("THỂ LỆ", "Index", "Home")</li>
+                        <li class="@isActive("Prediction", "Index")">@Html.ActionLink("DỰ ĐOÁN", "Index", "Prediction", new { filter = true }, null)</li>
+                        <li class="@isActive("Prediction", "User")">@Html.ActionLink("KẾT QUẢ DỰ ĐOÁN", "User", "Prediction")</li>
+                        <li class="@isActive("Wc2026Prediction", "Index")">@Html.ActionLink("WC26 DỰ ĐOÁN", "Index", "Wc2026Prediction", new { filter = true }, null)</li>
+                        <li class="@isActive("Wc2026Prediction", "Results")">@Html.ActionLink("WC26 KẾT QUẢ", "Results", "Wc2026Prediction")</li>
+                        <li class="@isActive("Ranking", "Index")">@Html.ActionLink("BẢNG XẾP HẠNG", "Index", "Ranking")</li>
+                        @if (ViewBag.AllowBetMoney == true)
+                        {
+            <li class="@isActive("Ranking", "Sponsor")">@Html.ActionLink("NHÀ TÀI TRỢ", "Sponsor", "Ranking")</li>
+    }
+                        <li class="@isActive("Home", "Comment")">@Html.ActionLink("BÌNH LUẬN", "Comment", "Home")</li>
+                        <li class="@isActive("GroupTable", "Index")">@Html.ActionLink("BẢNG ĐẤU", "Index", "GroupTable")</li>
+                    </ul>
+                    @Html.Partial("_LoginPartial")
+                </div>
             </div>
         </div>
     </div>
