@@ -239,5 +239,9 @@ namespace WorldCupPredictor.Controllers
 
             return View("User", vm);
         }
+        //public ActionResult User(int id)
+        //{
+        //    return View();
+        //}
     }
 }

@@ -84,20 +84,42 @@
                                 </td>
                                 @if (item.IsFinished)
                                 {
-                                    <td style="font-size: 17px; font-weight: bold; text-align: center; width: 70px">@homeScore</td>
-                                    <td style="text-align:center;"><span>vs</span><br /></td>
-                                    <td style="font-size: 17px; font-weight: bold; text-align: center; width: 70px">@awayScore</td>
-                                }
-                                else
-                                {
-                                    <td style="text-align: right;" class="f-14 @isBetedView">
-                                        <input @readol type="tel" placeholder="+" pattern="[0-9]" id="homeGoalPre_@item.Id" class="ipu-num @disabled" maxlength="1" value="@(item.UserHomeGoalPre?.ToString() ?? "")" inputmode="numeric" oninput="wcChangeScore('@item.Id',this,'home')" onfocus="wcClearPh(this)" onblur="wcRestorePh(this)" />
-                                    </td>
-                                    <td style="text-align: center;"><span class="@isNotBetedView">vs</span></td>
-                                    <td style="text-align: left;" class="f-14 @isBetedView">
-                                        <input @readol type="tel" placeholder="+" pattern="[0-9]" id="awayGoalPre_@item.Id" class="ipu-num @disabled" maxlength="1" value="@(item.UserAwayGoalPre?.ToString() ?? "")" inputmode="numeric" oninput="wcChangeScore('@item.Id',this,'away')" onfocus="wcClearPh(this)" onblur="wcRestorePh(this)" />
-                                    </td>
-                                }
+                            <td style="font-size: 17px; font-weight: bold; text-align: center; width: 70px">@homeScore</td>
+                                                    <td style="text-align:center;"><span>vs</span><br /></td>
+                                                                            <td style="font-size: 17px; font-weight: bold; text-align: center; width: 70px">@awayScore</td> }
+                                                                                                else
+                                                                                                {
+                                                                            <td style="text-align: right;" class="f-14 @isBetedView">
+                                                                                <input @readol type="tel"
+                                                                                       placeholder="+"
+                                                                                       pattern="[0-9]"
+                                                                                       id="homeGoalPre_@item.Id"
+                                                                                       class="ipu-num @disabled"
+                                                                                       maxlength="1"
+                                                                                       value="@(item.UserHomeGoalPre != null ? item.UserHomeGoalPre.ToString() : "")"
+                                                                                       inputmode="numeric"
+                                                                                       oninput="wcChangeScore('@item.Id',this,'home')"
+                                                                                       onfocus="wcClearPh(this)"
+                                                                                       onblur="wcRestorePh(this)" />
+                                                                            </td>
+
+                                                                                                    <td style="text-align: center;">
+                                                                                                        <span class="@isNotBetedView">vs</span>
+                                                                                                    </td>
+
+                                                                                                                            <td style="text-align: left;" class="f-14 @isBetedView">
+                                                                                                                                <input @readol type="tel"
+                                                                                                                                       placeholder="+"
+                                                                                                                                       pattern="[0-9]"
+                                                                                                                                       id="awayGoalPre_@item.Id"
+                                                                                                                                       class="ipu-num @disabled"
+                                                                                                                                       maxlength="1"
+                                                                                                                                       value="@(item.UserAwayGoalPre != null ? item.UserAwayGoalPre.ToString() : "")"
+                                                                                                                                       inputmode="numeric"
+                                                                                                                                       oninput="wcChangeScore('@item.Id',this,'away')"
+                                                                                                                                       onfocus="wcClearPh(this)"
+                                                                                                                                       onblur="wcRestorePh(this)" />
+                                                                                                                            </td>}
                                 <td style="text-align: right;" class="f-35">
                                     <span class="f-16">@item.AwayName&nbsp;</span>
                                     @if (!string.IsNullOrEmpty(item.AwayCrestUrl))

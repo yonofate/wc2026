@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Caching;
 using Newtonsoft.Json.Linq;
+using System.Net;
 using WorldCupPredictor.Models;
 
 namespace WorldCupPredictor.Services
@@ -17,7 +18,17 @@ namespace WorldCupPredictor.Services
     /// </summary>
     public static class Wc2026MatchCatalog
     {
-        private static readonly HttpClient Http = new HttpClient { Timeout = TimeSpan.FromSeconds(25) };
+        private static readonly HttpClient Http =
+    new HttpClient(
+        new HttpClientHandler
+        {
+            AutomaticDecompression =
+                DecompressionMethods.GZip |
+                DecompressionMethods.Deflate
+        })
+    {
+        Timeout = TimeSpan.FromSeconds(25)
+    };
 
         public static async Task<(List<Wc2026MatchVm> Matches, string ErrorMessage)> GetMatchesAsync()
         {
@@ -47,29 +58,30 @@ namespace WorldCupPredictor.Services
         private static async Task<string> FetchJsonAsync()
         {
             var customUrl = (ConfigurationManager.AppSettings["Wc2026:CustomMatchesUrl"] ?? "").Trim();
-            if (!string.IsNullOrEmpty(customUrl))
-            {
-                using (var resp = await Http.GetAsync(customUrl).ConfigureAwait(false))
-                {
-                    resp.EnsureSuccessStatusCode();
-                    return await resp.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-            }
-
             var token = (ConfigurationManager.AppSettings["Wc2026:FootballDataToken"] ?? "").Trim();
             var code = (ConfigurationManager.AppSettings["Wc2026:CompetitionCode"] ?? "WC").Trim();
-            if (string.IsNullOrEmpty(token))
-                return null;
 
-            var url = "https://api.football-data.org/v4/competitions/" + Uri.EscapeDataString(code) + "/matches";
+            var url = !string.IsNullOrEmpty(customUrl)
+                ? customUrl
+                : $"https://api.football-data.org/v4/competitions/{Uri.EscapeDataString(code)}/matches";
+
             using (var req = new HttpRequestMessage(HttpMethod.Get, url))
             {
-                req.Headers.TryAddWithoutValidation("X-Auth-Token", token);
+                if (!string.IsNullOrEmpty(token))
+                {
+                    req.Headers.TryAddWithoutValidation(
+                        "X-Auth-Token",
+                        token);
+                }
+
                 using (var resp = await Http.SendAsync(req).ConfigureAwait(false))
                 {
                     var body = await resp.Content.ReadAsStringAsync().ConfigureAwait(false);
+
                     if (!resp.IsSuccessStatusCode)
-                        throw new InvalidOperationException(((int)resp.StatusCode) + " " + body);
+                        throw new InvalidOperationException(
+                            $"{(int)resp.StatusCode}: {body}");
+
                     return body;
                 }
             }
